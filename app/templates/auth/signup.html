@@ -1,0 +1,52 @@
+{% extends "layout/base.html" %}
+
+{% block title %} | Register {% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="w-100 alert alert-{{ messages[0][0] }}">
+        {{ messages[0][1] }}
+    </div>
+  {% endif %}
+{% endwith %}
+<span class="my-3"></span>
+<form class="col-md-3 d-flex flex-column justify-content-center align-items-center" action="{{ url_for('auth.signup') }}" method="POST">
+  <div class="mb-2 w-100">
+    <label for="input-email" class="form-label">Name</label>
+    <input type="text" class="form-control" id="input-email" name="name" required>
+  </div>
+  <div class="mb-2 w-100">
+    <label for="input-email" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="input-email" name="email" required>
+  </div>
+  <div class="mb-2 w-100">
+    <label for="input-email" class="form-label">Telephone</label>
+    <input type="text" class="form-control" id="input-email" name="telephone" required>
+  </div>
+  <div class="mb-2 w-100">
+    <label for="options" class="form-label">Gender</label>
+    <div id="options" class="w-100 d-flex flex-row justify-content-start">
+      {% set gender = [
+        ('Male', 'male-radio'),
+        ('Female', 'female-radio')
+      ] -%}
+
+      {% for label, id in gender %}
+        <div class="form-check me-4">
+          <input class="form-check-input" type="radio" name="gender" id="{{ id }}" value="M">
+          <label class="form-check-label" for="male-radio">
+            {{ label }}
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="mb-2 w-100">
+    <label for="input-password" class="form-label">Password</label>
+    <input type="password" class="form-control" id="input-password" name="password" required>
+  </div>
+  <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold">Sign Up</button>
+</form>
+<span class="my-3"></span>
+{% endblock %}

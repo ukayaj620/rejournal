@@ -1,0 +1,29 @@
+{% extends "layout/base.html" %}
+
+{% block title %} | Login {% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="w-100 alert alert-{{ messages[0][0] }}">
+      {{ messages[0][1] }}
+    </div>
+  {% endif %}
+{% endwith %}
+<span class="my-3"></span>
+<form class="col-md-3 d-flex flex-column justify-content-center align-items-center" action="{{ url_for('auth.login') }}" method="POST">
+  <div class="mb-2 w-100">
+    <label for="input-email" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="input-email" name="email" required>
+  </div>
+  <div class="mb-2 w-100">
+    <label for="input-password" class="form-label">Password</label>
+    <input type="password" class="form-control" id="input-password" name="password" required>
+  </div>
+  <div class="mb-2 form-check">
+    <input type="checkbox" class="form-check-input" id="remember-me" name="remember">
+    <label class="form-check-label" for="remember-me">Remember me</label>
+  </div>
+  <button type="submit" class="btn btn-dark w-100 fw-bold">Login</button>
+</form>
+{% endblock %}
