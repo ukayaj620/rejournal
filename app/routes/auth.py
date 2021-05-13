@@ -23,7 +23,6 @@ def signup():
 
 @auth.route('/email-verification/<string:email>', methods=['GET'])
 def email_verification(email):
-  print(email)
   return render_template('auth/verification.html', data={'user_email': email})
 
 
