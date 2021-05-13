@@ -30,12 +30,12 @@
               <button 
                 class="rounded-3 nav-link text-white fw-bold d-flex flex-row align-items-center px-2 border-0 btn-dark"
               >
-                <img src="{{ url_for('static', filename='images/profile.svg') }}" width="24">
+                <img src="{{ url_for('static', filename='icons/profile.svg') }}" width="24">
                 <p class="mb-0 ms-2">Hi, {{ current_user.name }}</p>
               </button>
             </li>
             <li class="nav-item mt-2 mt-lg-0">
-              <a class="btn btn-outline-secondary me-2" href="/auth/logout">Log out</a>
+              <a class="btn btn-outline-secondary border-2 me-2 fw-bold" href="/auth/logout">Log out</a>
             </li>
             {% else %}
             <li class="nav-item ms-lg-4">

@@ -1,0 +1,22 @@
+{% extends "layout/base.html" %}
+
+{% block title %} Verification {% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="w-100 alert alert-{{ messages[0][0] }}">
+      {{ messages[0][1] }}
+    </div>
+  {% endif %}
+{% endwith %}
+<span class="my-3"></span>
+<h3 class="fw-bold">Verification Sent!</h3>
+<p>Link has been sent to your email, please verify your account in 24 hours</p>
+<p>Click <strong>Resend Link</strong> button if you don't get link</p>
+
+<form class="col-md-3" action="{{ url_for('auth.resend_link') }}" method="POST">
+  <input type="hidden" class="form-control" id="input-email" name="email" value="{{ data['user_email'] }}" required>
+  <button type="submit" class="btn btn-primary w-100 fw-bold">Resend Link</button>
+</form>
+{% endblock %}
