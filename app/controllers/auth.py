@@ -18,6 +18,14 @@ class AuthController:
     self.role = Role()
     self.verification = Verification()
 
+  def __determine_redirection(self, role):
+    choice = {
+      'user': 'home.index',
+      'admin': 'admin.index'
+    }
+
+    return choice.get(role, 'error.code_404')
+
   def sent_verification_email(self, email, msg='', reset=False):
     fetched_user = self.user.query.filter_by(email=email).first()
 
@@ -51,7 +59,9 @@ class AuthController:
       return redirect(url_for('auth.login'))
 
     login_user(user, remember=remember, duration=timedelta(days=30))
-    return redirect(url_for('home.index'))
+    role_name = self.role.query.filter_by(id=user.role_id).first().name
+    
+    return redirect(url_for(self.__determine_redirection(role=role_name)))
 
   def register(self, request):
     user = self.user.query.filter_by(email=request['email']).first()

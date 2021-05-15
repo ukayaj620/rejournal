@@ -37,4 +37,7 @@ def create_app():
   from app.routes.home import home
   app.register_blueprint(home, url_prefix='/')
 
+  from app.routes.admin import admin
+  app.register_blueprint(admin, url_prefix='/admin')
+
   return app
