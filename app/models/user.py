@@ -12,13 +12,14 @@ class User(UserMixin, db.Model):
   gender = db.Column(db.String(2), unique=False, nullable=False)
   is_verified = db.Column(db.Integer, unique=False, nullable=False)
   registered_date = db.Column(db.DateTime, nullable=False)
+  role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), unique=False, nullable=False)
   verification = db.relationship('Verification', backref='user', lazy=True)
 
   def __repr__(self):
     return '<User %r>' % self.name
 
   @staticmethod
-  def create(name, email, telephone, password, gender):
+  def create(name, email, telephone, password, gender, role_id):
     user = User(
       name=name,
       email=email,
@@ -26,7 +27,8 @@ class User(UserMixin, db.Model):
       password=password,
       gender=gender,
       is_verified=0,
-      registered_date=datetime.now()
+      registered_date=datetime.now(),
+      role_id=role_id
     )
     
     db.session.add(user)
