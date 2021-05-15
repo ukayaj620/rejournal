@@ -18,8 +18,7 @@ class User(UserMixin, db.Model):
   def __repr__(self):
     return '<User %r>' % self.name
 
-  @staticmethod
-  def create(name, email, telephone, password, gender, role_id):
+  def create(self, name, email, telephone, password, gender, role_id):
     user = User(
       name=name,
       email=email,
@@ -34,8 +33,7 @@ class User(UserMixin, db.Model):
     db.session.add(user)
     db.session.commit()
 
-  @staticmethod
-  def verified_user(id):
+  def verified_user(self, id):
     user = User.query.filter_by(id=id).first()
     user.is_verified = 1
 
