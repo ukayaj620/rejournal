@@ -10,7 +10,6 @@ class RoleChecker:
       @functools.wraps(func)
       def wrapper_check_permission(*args, **kwargs):
         role_name = Role.query.filter_by(id=current_user.role_id).first().name
-        print(role_name)
         if role != role_name:
           return redirect(url_for('error.unauthorized'))
 

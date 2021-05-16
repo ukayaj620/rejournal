@@ -13,40 +13,37 @@
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-journals', 'Journal', [
-                'New Journal',
-                'View Journals'
+                ('New Journal', ''),
+                ('View Journals', '')
               ]),
             ]-%}
           {% elif role == 'Reviewer' %}
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
-                'Newly Submmitted Manuscripts',
-                'In Review Manuscripts'
+                ('Newly Submmitted Manuscripts', ''),
+                ('In Review Manuscripts', '')
               ]),
             ]-%}
           {% elif role == 'Admin' %}
             {% set sidebar=[
-              ('fs-5 bi-house', 'Home', ''),
+              ('fs-5 bi-house', 'Home', []),
               ('fs-5 bi-people', 'Reviewers', [
-                'New Reviewer',
-                'View Reviewers'
+                ('New Reviewer', ''),
+                ('View Reviewers', '')
               ]),
               ('fs-5 bi-person-lines-fill', 'Admins', [
-                'New Admin',
-                'View Admins'
+                ('New Admin', ''),
+                ('View Admins', '')
               ]),
-              ('fs-5 bi-tags-fill', 'Topics', [
-                'New Topic',
-                'View Topics'
-              ]),
+              ('fs-5 bi-tags-fill', 'Topics', [url_for('admin.topic')]),
             ]-%}
           {% endif %}
           <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
-            {% for icon, label, dropdown in sidebar %}
-              {% if dropdown == '' %}
+            {% for icon, label, href in sidebar %}
+              {% if href|length <= 1 %}
                 <li class="nav-item">
-                  <a href="#" class="nav-link text-dark px-sm-0 px-2">
+                  <a href="{{ href[0] }}" class="nav-link text-dark px-sm-0 px-2">
                     <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
                   </a>
                 </li>
@@ -56,8 +53,8 @@
                   <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownJournal">
-                {% for items in dropdown %}
-                  <li><a style="font-size: small;" class="dropdown-item" href="#">{{ items }}</a></li>
+                {% for label, dropdown_href in href %}
+                  <li><a style="font-size: small;" class="dropdown-item" href="{{ dropdown_href }}">{{ label }}</a></li>
                 {% endfor %}
                 </ul>
               </li>

@@ -1,0 +1,117 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Topic {% endblock %}
+
+{% block content %}
+<div class="col ms-3">
+  <h3 class="fw-bold mt-3">Topic</h3>
+  <button class="btn btn-success fw-semibold mt-3" data-bs-toggle="modal" data-bs-target="#addTopicModal"><i class="bi bi-plus-square-fill me-2"></i> Add Topic</button>
+  <div class="col-10 mt-3">
+    <table id="topicDataTable" class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-light fw-semibold">
+        {% for topic in topics %}
+          <tr class="align-middle">
+            <td scope="col">{{ 'T{:>04}'.format(topic.id) }}</td>
+            <td scope="col">{{ topic.name }}</td>
+            <td scope="col">
+              <button class="btn btn-warning btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#editTopicModal{{ topic.id }}"><i class="bi bi-pencil-square"></i> Edit</button>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteTopicModal{{ topic.id }}"><i class="bi bi-pencil-square"></i> Delete</button>
+            </td>
+          </tr>
+          <!-- Edit Topic Modal -->
+          <div id="editTopicModal{{ topic.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Edit Topic</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('admin.update_topic', id=topic.id) }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-2">
+                      <label class="form-label fw-semibold">Topic Name</label>
+                      <input type="text" class="form-control" name="name" required value="{{ topic.name }}">
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-success w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delete Topic Modal -->
+          <div id="deleteTopicModal{{ topic.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Delete Topic</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('admin.delete_topic', id=topic.id) }}" method="GET" enctype="multipart/form-data">
+                    <div>
+                      <label class="form-label fw-semibold">Are you sure to delete this topic?</label>
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Topic Modal -->
+  <div id="addTopicModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">New Topic</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('admin.create_topic') }}" method="POST" enctype="multipart/form-data">
+            <div class="mb-2">
+              <label class="form-label fw-semibold">Topic Name</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="mb-2 mt-4 w-100">
+              <button class="btn btn-success w-100 fw-bold" type="submit">Confirm</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+  $('#topicDataTable').DataTable();
+});
+</script>
+{% endblock %}
