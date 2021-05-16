@@ -111,7 +111,9 @@
 {% block js %}
 <script>
 $(document).ready(function() {
-  $('#topicDataTable').DataTable();
+  $('#topicDataTable').DataTable({
+    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  });
 });
 </script>
 {% endblock %}
