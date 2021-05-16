@@ -18,14 +18,18 @@ class AuthController:
     self.role = Role()
     self.verification = Verification()
 
-  def __determine_redirection(self, role):
+  def get_role_name(self, role_id):
+    return self.role.query.filter_by(id=role_id).first().name
+
+  def determine_redirection(self, role_id):
+    role_name = self.get_role_name(role_id=role_id)
     choice = {
       'user': 'home.index',
       'admin': 'admin.index',
       'reviewer': 'reviewer.index'
     }
 
-    return choice.get(role, 'error.unauthorized')
+    return redirect(url_for(choice.get(role_name, 'error.unauthorized')))
 
   def sent_verification_email(self, email, msg='', reset=False):
     fetched_user = self.user.query.filter_by(email=email).first()
@@ -60,9 +64,8 @@ class AuthController:
       return redirect(url_for('auth.login'))
 
     login_user(user, remember=remember, duration=timedelta(days=30))
-    role_name = self.role.query.filter_by(id=user.role_id).first().name
     
-    return redirect(url_for(self.__determine_redirection(role=role_name)))
+    return self.determine_redirection(role_id=user.role_id)
 
   def register(self, request):
     user = self.user.query.filter_by(email=request['email']).first()

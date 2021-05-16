@@ -1,0 +1,10 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Profile {% endblock %}
+
+{% block content %}
+<div class="col pt-4">
+  <h3 class="fw-bold">Profile</h3>
+  <p>{{ current_user.name }}</p>
+</div>
+{% endblock %}
