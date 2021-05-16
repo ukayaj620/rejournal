@@ -1,0 +1,95 @@
+{% include "layout/head.html" %}
+
+<body class="vw-100" style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
+  <div class="container-fluid overflow-hidden">
+    <div class="row vh-100 overflow-auto">
+      <div class="col-12 col-sm-3 col-xl-2 px-sm-1 px-0 py-1 py-sm-0 shadow-sm bg-white d-flex sticky-top">
+        <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
+          <a href="/" class="d-flex align-items-center py-sm-1 mb-md-0 me-md-auto text-white text-decoration-none">
+            <img class="col-8 col-sm-10 col-xl-12" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
+          </a>
+          <hr class="d-none d-sm-block col-12 bg-dark border border-dark">
+          {% if role == 'User' %}
+            {% set sidebar=[
+              ('fs-5 bi-house', 'Home', ''),
+              ('fs-5 bi-journals', 'Journal', [
+                'New Journal',
+                'View Journals'
+              ]),
+            ]-%}
+          {% elif role == 'Reviewer' %}
+            {% set sidebar=[
+              ('fs-5 bi-house', 'Home', ''),
+              ('fs-5 bi-files', 'Manuscripts', [
+                'New Submmitted Manuscripts',
+                'In Review Manuscripts'
+              ]),
+            ]-%}
+          {% elif role == 'Admin' %}
+            {% set sidebar=[
+              ('fs-5 bi-house', 'Home', ''),
+              ('fs-5 bi-people', 'Reviewers', [
+                'New Reviewer',
+                'View Reviewers'
+              ]),
+              ('fs-5 bi-person-lines-fill', 'Admins', [
+                'New Admin',
+                'View Admins'
+              ]),
+              ('fs-5 bi-tags-fill', 'Topics', [
+                'New Topic',
+                'View Topics'
+              ]),
+            ]-%}
+          {% endif %}
+          <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
+            {% for icon, label, dropdown in sidebar %}
+              {% if dropdown == '' %}
+                <li class="nav-item">
+                  <a href="#" class="nav-link text-dark px-sm-0 px-2">
+                    <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline">{{ label }}</span>
+                  </a>
+                </li>
+              {% else %}
+              <li class="dropdown">
+                <a href="#" class="nav-link text-dark dropdown-toggle px-sm-0 px-1" id="dropdownJournal" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline">{{ label }}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownJournal">
+                {% for items in dropdown %}
+                  <li><a class="dropdown-item" href="#">{{ items }}</a></li>
+                {% endfor %}
+                </ul>
+              </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+            <hr class="d-none d-sm-block col-12 bg-dark border border-dark">
+            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fs-4 bi-emoji-sunglasses-fill"></i>
+              <span class="d-none d-sm-inline mx-1"><p class="mb-0 text-dark">{{ current_user.name }}</p></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li>
+                  <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="/auth/logout">Log Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col d-flex flex-column h-sm-100">
+        <main class="row overflow-auto">
+          {% block content %}
+          {% endblock %}
+        </main>
+      </div>
+    </div>
+  </div>
+  {% block js %}
+  {% endblock %}
+</body>
+</body>
+</html>
