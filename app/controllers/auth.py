@@ -21,10 +21,11 @@ class AuthController:
   def __determine_redirection(self, role):
     choice = {
       'user': 'home.index',
-      'admin': 'admin.index'
+      'admin': 'admin.index',
+      'reviewer': 'reviewer.index'
     }
 
-    return choice.get(role, 'error.code_404')
+    return choice.get(role, 'error.unauthorized')
 
   def sent_verification_email(self, email, msg='', reset=False):
     fetched_user = self.user.query.filter_by(email=email).first()

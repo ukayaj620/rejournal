@@ -46,4 +46,7 @@ def create_app():
   from app.routes.reviewer import reviewer
   app.register_blueprint(reviewer, url_prefix='/reviewer')
 
+  from app.routes.error import error
+  app.register_blueprint(error, url_prefix='/error')
+
   return app
