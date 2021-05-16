@@ -43,6 +43,12 @@ class User(UserMixin, db.Model):
 
     db.session.commit()
 
+  def update_image(self, filename, id):
+    user = User.query.filter_by(id=id).first()
+    user.picture_path = filename
+
+    db.session.commit()
+
   def verified_user(self, id):
     user = User.query.filter_by(id=id).first()
     user.is_verified = 1

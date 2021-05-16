@@ -3,44 +3,95 @@
 {% block title %} | Profile {% endblock %}
 
 {% block content %}
-<div class="col ms-3">
+<div class="ps-sm-3 d-flex flex-column align-items-center align-items-lg-start">
   <div class="col-11 d-flex flex-row align-items-center justify-content-between mt-3">
     <h3 class="fw-bold">Profile</h3>
     <a class="btn btn-secondary fw-bold align-self-end" href="{{ url_for('base.update_profile_data') }}">Edit Profile</a>
   </div>
-  <div class="d-flex flex-row align-items-center col-11">
-    <div class="col-5 d-flex flex-column align-items-center">
-      <div class="w-75 p-3">
-        <img class="rounded-circle shadow-sm w-100" src="{{ url_for('static', filename='icons/profile.svg') }}">
+  <div class="d-flex flex-lg-row flex-column align-items-center col-11">
+    <div class="col-12 col-lg-5 d-flex flex-column align-items-center">
+      <div class="w-100 p-3 d-flex align-items-center justify-content-center">
+        {% if user.picture_path %}
+        <img class="rounded-circle shadow-sm" width="240px" height="240px" style="object-fit: cover;" src="{{ url_for('static', filename='images/uploads/' + user.picture_path) }}">
+        {% else %}
+        <img class="rounded-circle shadow-sm" width="240px" height="240px" src="{{ url_for('static', filename='icons/profile.svg') }}">
+        {% endif %}
       </div>
-      <button class="btn btn-secondary fw-bold mt-3">Upload New Picture</button>
+      <button class="btn btn-secondary fw-bold my-3" data-bs-toggle="modal" data-bs-target="#updateProfilePicture">Upload New Picture</button>
+      <span class="my-1"></span>
     </div>
-    <div class="col-6 d-flex flex-column align-items-center">
+    <div class="col-12 col-lg-6 d-flex flex-column align-items-center">
       <div class="col-12 d-flex flex-column justify-content-center align-items-center fw-semibold text-dark">
         <div class="mb-2 w-100">
           <label class="form-label">Name</label>
-          <h5 class="fs-5 fw-bold text-dark">{{ current_user.name }}</h5>
+          <p class="fs-5 fw-bold text-dark">{{ user.name }}</p>
         </div>
         <div class="mb-2 w-100">
           <label class="form-label">Email</label>
-          <a class="text-decoration-none" href="mailto:{{ current_user.email }}">
-            <h5 class="fs-5 fw-bold">{{ current_user.email }}</h5>
+          <a class="text-decoration-none" href="mailto:{{ user.email }}">
+            <p class="fs-5 fw-bold">{{ user.email }}</p>
           </a>
         </div>
         <div class="mb-2 w-100">
           <label class="form-label">Telephone</label>
-          <h5 class="fs-5 fw-bold text-dark">{{ current_user.telephone }}</h5>
+          <p class="fs-5 fw-bold text-dark">{{ user.telephone }}</p>
         </div>
         <div class="mb-2 w-100">
           <label class="form-label">Gender</label>
-          {% if current_user.gender == 'M' %}
-            <h5 class="fs-5 fw-bold text-primary"><i class="fs-5 bi-gender-male"></i> Male</h5>
+          {% if user.gender == 'M' %}
+            <p class="fs-5 fw-bold text-primary"><i class="fs-5 bi-gender-male"></i> Male</p>
           {% else %}
-            <h5 class="fs-5 fw-bold text-danger"><i class="fs-5 bi-gender-female"></i> Female</h5>
+            <p class="fs-5 fw-bold text-danger"><i class="fs-5 bi-gender-female"></i> Female</p>
           {% endif %}
         </div>
       </div>
     </div>
   </div>
+  <div id="updateProfilePicture" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">New Topic</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('base.update_profile_image') }}" method="POST" enctype="multipart/form-data">
+            <div class="mb-2">
+              <label class="form-label fw-bold" for="input-photo">Pictures</label>
+              <input onchange="readImage(this)" type="file" class="form-control" id="input-photo" name="photo" required>
+            </div>
+            <div class="mb-2 w-100">
+              <img id="profile" class="w-100">
+            </div>
+            <div class="mb-2 mt-4 w-100">
+              <button class="btn btn-success w-100 fw-bold" type="submit">Confirm</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  const readImage = (input) => {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const width = $('#profile').attr('src', e.target.result).width()
+        $('#profile')
+          .attr('src', e.target.result)
+          .height(width);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
 {% endblock %}

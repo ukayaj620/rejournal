@@ -3,12 +3,12 @@
 <body class="vw-100" style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
   <div class="container-fluid overflow-hidden">
     <div class="row vh-100 overflow-auto">
-      <div class="col-12 col-sm-3 col-xl-2 px-sm-1 px-0 py-1 py-sm-0 shadow-sm bg-white d-flex sticky-top">
+      <div class="col-12 col-sm-4 col-md-3 col-xl-2 px-sm-1 px-0 py-1 py-sm-0 shadow-sm bg-white d-flex sticky-top">
         <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
           <a href="/" class="d-flex align-items-center py-sm-1 mb-md-0 me-md-auto text-white text-decoration-none">
-            <img class="col-8 col-sm-10 col-xl-12" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
+            <img class="col-9 col-sm-10 col-xl-12" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
           </a>
-          <hr class="d-none d-sm-block col-12 bg-dark border border-dark">
+          <hr class="d-none d-sm-block w-100 bg-dark border border-dark">
           {% if role == 'User' %}
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
@@ -62,7 +62,7 @@
             {% endfor %}
           </ul>
           <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-            <hr class="d-none d-sm-block col-12 bg-dark border border-dark">
+            <hr class="d-none d-sm-block w-100 bg-dark border border-dark">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fs-4 bi-emoji-sunglasses-fill"></i>
               <span class="d-none d-sm-inline mx-1"><p class="mb-0 text-dark fw-semibold">{{ current_user.name }}</p></span>
