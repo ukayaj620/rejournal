@@ -1,0 +1,46 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Profile {% endblock %}
+
+{% block content %}
+<div class="col ms-3">
+  <div class="col-11 d-flex flex-row align-items-center justify-content-between mt-3">
+    <h3 class="fw-bold">Profile</h3>
+    <a class="btn btn-secondary fw-bold align-self-end" href="{{ url_for('base.update_profile_data') }}">Edit Profile</a>
+  </div>
+  <div class="d-flex flex-row align-items-center col-11">
+    <div class="col-5 d-flex flex-column align-items-center">
+      <div class="w-75 p-3">
+        <img class="rounded-circle shadow-sm w-100" src="{{ url_for('static', filename='icons/profile.svg') }}">
+      </div>
+      <button class="btn btn-secondary fw-bold mt-3">Upload New Picture</button>
+    </div>
+    <div class="col-6 d-flex flex-column align-items-center">
+      <div class="col-12 d-flex flex-column justify-content-center align-items-center fw-semibold text-dark">
+        <div class="mb-2 w-100">
+          <label class="form-label">Name</label>
+          <h5 class="fs-5 fw-bold text-dark">{{ current_user.name }}</h5>
+        </div>
+        <div class="mb-2 w-100">
+          <label class="form-label">Email</label>
+          <a class="text-decoration-none" href="mailto:{{ current_user.email }}">
+            <h5 class="fs-5 fw-bold">{{ current_user.email }}</h5>
+          </a>
+        </div>
+        <div class="mb-2 w-100">
+          <label class="form-label">Telephone</label>
+          <h5 class="fs-5 fw-bold text-dark">{{ current_user.telephone }}</h5>
+        </div>
+        <div class="mb-2 w-100">
+          <label class="form-label">Gender</label>
+          {% if current_user.gender == 'M' %}
+            <h5 class="fs-5 fw-bold text-primary"><i class="fs-5 bi-gender-male"></i> Male</h5>
+          {% else %}
+            <h5 class="fs-5 fw-bold text-danger"><i class="fs-5 bi-gender-female"></i> Female</h5>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

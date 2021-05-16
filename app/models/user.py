@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
   is_verified = db.Column(db.Integer, unique=False, nullable=False)
   registered_date = db.Column(db.DateTime, nullable=False)
   role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), unique=False, nullable=False)
+  picture_path = db.Column(db.String(255), nullable=True)
   verification = db.relationship('Verification', backref='user', lazy=True)
 
   def __repr__(self):
@@ -31,6 +32,15 @@ class User(UserMixin, db.Model):
     )
     
     db.session.add(user)
+    db.session.commit()
+
+  def update(self, name, email, telephone, gender, id):
+    user = User.query.filter_by(id=id).first()
+    user.name = name
+    user.email = email
+    user.telephone = telephone
+    user.gender = gender
+
     db.session.commit()
 
   def verified_user(self, id):
