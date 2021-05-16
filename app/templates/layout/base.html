@@ -1,18 +1,18 @@
 {% include "layout/head.html" %}
 
-<body class="vw-100" style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
+<body style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
   <header class="sticky-top">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-2">
       <div class="container-fluid d-flex w-100">
-        <a class="navbar-brand col-lg-2 col-5" href="/">
+        <a class="navbar-brand col-sm-3 col-md-2 col-5" href="/">
           <img class="w-100" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-dropdown" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="nav-dropdown">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            <li class="nav-item ms-lg-4">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center py-2 py-lg-0">
+            <li class="nav-item ms-sm-4">
               <a class="btn btn-dark border-2 me-2 fw-bold" href="/auth/signup">Sign Up</a>
               <a class="btn btn-outline-secondary border-2 fw-bold" href="/auth/login">Login</a>
             </li>

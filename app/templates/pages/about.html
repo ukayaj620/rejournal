@@ -1,0 +1,74 @@
+{% extends "layout/base.html" %}
+
+{% block title %} | About {% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center pt-5">
+  <div class="col-11 d-flex flex-column flex-sm-row justify-content-center align-items-center text-dark vh-50">
+    <div class="col-10 col-sm-5 me-sm-5 d-flex justify-content-center align-items-center">
+      <img class="col-10" src="{{ url_for('static', filename='images/scientific_research.svg') }}" height="320px">
+    </div>
+    <div class="col-12 col-sm-7 mt-4 mt-sm-0 d-flex flex-column align-items-center align-items-sm-start">
+      <p class="fw-bold fs-1 text-center text-sm-start">Contribute to The World</p>
+      <p class="fw-semibold fs-5 text-center text-sm-start">
+        Contribute to the world of science through your groundbreaking research.
+      </p>
+      <a class="btn btn-dark border-2 mt-2 fs-5 fw-bold px-4" href="/auth/signup">Join for Free</a>
+    </div>
+  </div>
+  <hr style="background-color: #a3a3a3; border-color: #a3a3a3" class="d-block col-12 border my-5">
+
+  <div class="col-11 d-flex flex-column flex-sm-row-reverse justify-content-center align-items-center text-dark">
+    <div class="col-10 col-sm-5 ms-sm-5 d-flex justify-content-center align-items-center">
+      <img class="col-10" src="{{ url_for('static', filename='images/researching.svg') }}" height="320px">
+    </div>
+    <div class="col-12 col-sm-7 mt-4 mt-sm-0 d-flex flex-column align-items-center align-items-sm-start">
+      <p class="fw-bold fs-1 text-center text-sm-start">Discover Science World</p>
+      <p class="fw-semibold fs-5 text-center text-sm-start">
+        Discover scientific knowledge and stay connected to the world of science.
+      </p>
+      <div class="d-flex col-12 flex-row flex-wrap justify-content-center justify-content-sm-start">
+        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Computer</a>
+        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Biology</a>
+        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Physics</a>
+        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">More...</a>
+      </div>
+    </div>
+  </div>
+  <hr style="background-color: #a3a3a3; border-color: #a3a3a3" class="d-block col-12 border my-5">
+
+  <div class="col-11 d-flex flex-column flex-sm-row justify-content-center align-items-center text-dark">
+    <div class="col-10 col-sm-5 me-sm-5 d-flex justify-content-center align-items-center">
+      <img class="col-10" src="{{ url_for('static', filename='images/online_articles.svg') }}" height="320px">
+    </div>
+    <div class="col-12 col-sm-7 mt-4 mt-sm-0 d-flex flex-column align-items-center align-items-sm-start">
+      <p class="fw-bold fs-1 text-center text-sm-start">Explore Various Research Paper</p>
+      <p class="fw-semibold fs-5 text-center text-sm-start">
+        Explore journals from all around the world with various topics.
+      </p>
+      <a class="btn btn-dark border-2 mt-2 fs-5 fw-bold px-4" href="#">Explore All Topics</a>
+    </div>
+  </div>
+  <hr class="d-block col-12 bg-transparent my-5">
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="w-100 d-flex flex-sm-row flex-column container-fluid align-items-center justify-content-between p-4" style="background-color: #DDDDDD;">
+  <div class="ms-sm-4">
+    <h5 class="fw-bold mb-2">Developed by Jayaku Briliantio</h5>
+    <div class="d-flex flex-row align-items-center justify-content-center justify-content-sm-start">
+      <a class="me-3 text-dark" target="_blank" href="https://github.com/ukayaj620/">
+        <i class="fs-1 bi-github"></i>
+      </a>
+      <a class="text-dark" target="_blank" href="https://www.linkedin.com/in/neartojayakubriliantio/">
+        <i class="fs-1 bi-linkedin"></i>
+      </a>
+    </div>
+  </div>
+  <div class="mt-4 mt-sm-0 me-sm-4 d-flex flex-column align-items-center align-items-sm-end">
+    <img src="{{ url_for('static', filename='icons/rejournal-full.svg') }}" height="48px">
+    <p class="text-sm-end mt-2 small fw-semibold">Copyright © by Jayaku B. All rights reserved.</p>
+  </div>
+</footer>
+{% endblock %}
