@@ -6,7 +6,7 @@
 <div class="col ms-3">
   <h3 class="fw-bold mt-3">Topic</h3>
   <button class="btn btn-success fw-semibold mt-3" data-bs-toggle="modal" data-bs-target="#addTopicModal"><i class="bi bi-plus-square-fill me-2"></i> Add Topic</button>
-  <div class="col-10 mt-3">
+  <div class="col-11 mt-3">
     <table id="topicDataTable" class="table table-striped">
       <thead class="table-dark">
         <tr>
@@ -22,7 +22,7 @@
             <td scope="col">{{ topic.name }}</td>
             <td scope="col">
               <button class="btn btn-warning btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#editTopicModal{{ topic.id }}"><i class="bi bi-pencil-square"></i> Edit</button>
-              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteTopicModal{{ topic.id }}"><i class="bi bi-pencil-square"></i> Delete</button>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteTopicModal{{ topic.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
             </td>
           </tr>
           <!-- Edit Topic Modal -->

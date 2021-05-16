@@ -10,16 +10,16 @@ def login():
   if request.method == 'POST':
     remember = True if request.form.get('remember') else False
     return auth_controller.login(request=request.form, remember=remember)
-  elif request.method == 'GET':
-    return render_template('auth/login.html')
+  
+  return render_template('auth/login.html')
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
   if request.method == 'POST':
     return auth_controller.register(request=request.form)
-  elif request.method == 'GET':
-    return render_template('auth/signup.html')
+  
+  return render_template('auth/signup.html')
 
 
 @auth.route('/email-verification/<string:email>', methods=['GET'])
