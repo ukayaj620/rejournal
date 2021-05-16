@@ -31,13 +31,19 @@ def create_app():
   def load_user(user_id):
     return User.query.get(int(user_id))
 
+  from app.routes.base import base
+  app.register_blueprint(base, url_prefix='/')
+
   from app.routes.auth import auth
   app.register_blueprint(auth, url_prefix='/auth')
 
   from app.routes.home import home
-  app.register_blueprint(home, url_prefix='/')
+  app.register_blueprint(home, url_prefix='/home')
 
   from app.routes.admin import admin
   app.register_blueprint(admin, url_prefix='/admin')
+  
+  from app.routes.reviewer import reviewer
+  app.register_blueprint(reviewer, url_prefix='/reviewer')
 
   return app
