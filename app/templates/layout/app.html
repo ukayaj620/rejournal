@@ -21,7 +21,7 @@
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
-                'New Submmitted Manuscripts',
+                'Newly Submmitted Manuscripts',
                 'In Review Manuscripts'
               ]),
             ]-%}
@@ -47,17 +47,17 @@
               {% if dropdown == '' %}
                 <li class="nav-item">
                   <a href="#" class="nav-link text-dark px-sm-0 px-2">
-                    <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline">{{ label }}</span>
+                    <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
                   </a>
                 </li>
               {% else %}
               <li class="dropdown">
                 <a href="#" class="nav-link text-dark dropdown-toggle px-sm-0 px-1" id="dropdownJournal" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline">{{ label }}</span>
+                  <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownJournal">
                 {% for items in dropdown %}
-                  <li><a class="dropdown-item" href="#">{{ items }}</a></li>
+                  <li><a style="font-size: small;" class="dropdown-item" href="#">{{ items }}</a></li>
                 {% endfor %}
                 </ul>
               </li>
@@ -68,14 +68,14 @@
             <hr class="d-none d-sm-block col-12 bg-dark border border-dark">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fs-4 bi-emoji-sunglasses-fill"></i>
-              <span class="d-none d-sm-inline mx-1"><p class="mb-0 text-dark">{{ current_user.name }}</p></span>
+              <span class="d-none d-sm-inline mx-1"><p class="mb-0 text-dark fw-semibold">{{ current_user.name }}</p></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a style="font-size: small;" class="dropdown-item" href="/profile">Profile</a></li>
               <li>
                   <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="/auth/logout">Log Out</a></li>
+              <li><a style="font-size: small;" class="dropdown-item" href="/auth/logout">Log Out</a></li>
             </ul>
           </div>
         </div>
