@@ -1,0 +1,70 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Admin {% endblock %}
+
+{% block content %}
+<div class="col ms-3">
+  <h3 class="fw-bold mt-3">Admins</h3>
+  <a type="button" class="btn btn-success fw-semibold mt-3"><i class="bi bi-plus-square-fill me-2"></i> Add Admins</a>
+  <div class="col-11 mt-3">
+    <table id="adminDataTable" class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-light fw-semibold">
+        {% for admin in admins %}
+          <tr class="align-middle">
+            <td scope="col">{{ 'ADM{:>04}'.format(admin.id) }}</td>
+            <td scope="col">{{ admin.name }}</td>
+            <td scope="col">{{ admin.email }}</td>
+            <td scope="col">
+              <a type="button" class="btn btn-warning btn-sm fw-semibold me-1"><i class="bi bi-pencil-square"></i> Edit</a>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteAdminModal{{ admin.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
+            </td>
+          </tr>
+
+          <!-- Delete Admin Modal -->
+          <div id="deleteAdminModal{{ admin.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Delete Admin</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="GET" enctype="multipart/form-data">
+                    <div>
+                      <label class="form-label fw-semibold">Are you sure to delete this admin?</label>
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+  $('#adminDataTable').DataTable({
+    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  });
+});
+</script>
+{% endblock %}

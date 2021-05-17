@@ -1,5 +1,6 @@
 from flask import redirect, url_for
 from app.models.user import User
+from app.models.role import Role
 from app.utils.image import save_image, delete_image
 
 
@@ -7,6 +8,11 @@ class UserController:
   
   def __init__(self):
     self.user = User()
+    self.role = Role()
+
+  def fetch_user_by_role(self, role):
+    role_id = self.role.query.filter_by(name=role).first().id
+    return self.user.query.filter_by(role_id=role_id).all()
 
   def get_profile(self, user_id):
     return self.user.query.filter_by(id=user_id).first()
