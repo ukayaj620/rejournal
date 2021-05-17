@@ -27,6 +27,14 @@ def email_verification(email):
   return render_template('auth/verification.html', data={'user_email': email})
 
 
+@auth.route('/update-password/<string:email>', methods=['GET', 'POST'])
+def update_password(email):
+  if request.method == 'POST':
+    return auth_controller.update_password(request=request.form)
+
+  return render_template('auth/update_password.html', data={'user_email': email})
+
+
 @auth.route('/verify/<int:user_id>/<string:token>', methods=['GET'])
 def verify(user_id, token):
   return auth_controller.verify(token=token, user_id=user_id)

@@ -30,7 +30,6 @@ class User(UserMixin, db.Model):
       registered_date=datetime.now(),
       role_id=role_id
     )
-    
     db.session.add(user)
     db.session.commit()
 
@@ -40,18 +39,25 @@ class User(UserMixin, db.Model):
     user.email = email
     user.telephone = telephone
     user.gender = gender
+    db.session.commit()
 
+  def update_password(self, password, id):
+    user = User.query.filter_by(id=id).first()
+    user.password = password
     db.session.commit()
 
   def update_image(self, filename, id):
     user = User.query.filter_by(id=id).first()
     user.picture_path = filename
-
     db.session.commit()
 
   def verified_user(self, id):
     user = User.query.filter_by(id=id).first()
     user.is_verified = 1
+    db.session.commit()
 
+  def delete(self, id):
+    user = User.query.filter_by(id=id).first() 
+    db.session.delete(user)
     db.session.commit()
 

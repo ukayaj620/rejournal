@@ -30,7 +30,8 @@ def profile():
 @login_required
 def update_profile_data():
   if request.method == 'POST':
-    return user_controller.update_profile_data(request=request.form, user_id=current_user.id)
+    user_controller.update(request=request.form, user_id=current_user.id)
+    return redirect(url_for('base.profile'))
 
   return render_template(
     '/pages/profile/update.html', 

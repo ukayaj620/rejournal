@@ -9,6 +9,7 @@ from app.models.role import Role
 from app.models.verification import Verification
 from app.utils.mailer import send_signup_verification
 from app.utils.time import is_expire
+from app.utils.cryptographic import encoder, decoder
 
 
 class AuthController:
@@ -32,7 +33,7 @@ class AuthController:
     return redirect(url_for(choice.get(role_name, 'error.unauthorized')))
 
   def sent_verification_email(self, email, msg='', reset=False):
-    fetched_user = self.user.query.filter_by(email=email).first()
+    fetched_user = self.user.query.filter_by(email=decoder(email)).first()
 
     token = ''.join(random.choice(string.ascii_letters) for i in range(20))
     link = f'{fetched_user.id}/{token}'
@@ -57,7 +58,11 @@ class AuthController:
       return redirect(url_for('auth.login'))
 
     if bool(user.is_verified) == False:
-      return AuthController.sent_verification_email(email=request['email'], msg='Your email has not been verified', reset=True)
+      if self.get_role_name(role_id=user.role_id) == 'user':
+        return self.sent_verification_email(email=encoder(request['email']), msg='Your email has not been verified', reset=True)
+
+      flash('Please renew your password!', 'info')
+      return redirect(url_for('auth.update_password', email=encoder(request['email'])))
 
     if not check_password_hash(user.password, request['password']):
       flash('Please check your login details and try again.', 'danger')
@@ -87,7 +92,7 @@ class AuthController:
       role_id=self.role.query.filter_by(name='user').first().id
     )
 
-    return self.sent_verification_email(email=request['email'])
+    return self.sent_verification_email(email=encoder(request['email']))
 
   def verify(self, token, user_id):
     verification = self.verification.query.filter_by(user_id=user_id).first()
@@ -103,6 +108,14 @@ class AuthController:
     self.verification.delete(token_id=verification.id)
     
     flash('Your account has been verified, please login', 'info')
+    return redirect(url_for('auth.login'))
+
+  def update_password(self, request):
+    print(decoder(request['email']))
+    user = self.user.query.filter_by(email=decoder(request['email'])).first()
+    self.user.update_password(password=generate_password_hash(request['password'], method='sha256'), id=user.id)
+    self.user.verified_user(id=user.id)
+    flash('Your password has been updated and account has been verified, please login', 'info')
     return redirect(url_for('auth.login'))
 
   def logout(self):

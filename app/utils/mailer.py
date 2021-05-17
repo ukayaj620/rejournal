@@ -20,7 +20,23 @@ def send_signup_verification(to, link):
   """
 
   send_email(
-    subject='Itevenz Registration Verification',
+    subject='ReJournal Registration Verification',
+    sender=str(os.environ.get('MAIL_USERNAME')),
+    to=[to],
+    html=message_body
+  )
+
+def send_account_credential(to, password):
+  message_body = f"""
+    <div style="align-text: center;">
+      <h4>Your Account has been created</h4>
+      <p>Please use this code below as your password</p>
+      <p>{password}</p>
+    </div>
+  """
+
+  send_email(
+    subject='ReJournal Account Creation',
     sender=str(os.environ.get('MAIL_USERNAME')),
     to=[to],
     html=message_body

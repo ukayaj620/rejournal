@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 from app.middlewares.role_checker import RoleChecker
 from app.controllers.topic import TopicController
@@ -14,7 +14,10 @@ user_controller = UserController()
 @login_required
 @role_checker.check_permission(role='admin')
 def index():
-  return render_template('pages/index.html', role='Admin')
+  metrics = {
+    'topic': topic_controller.topic.query.count()
+  }
+  return render_template('pages/admin/index.html', metrics=metrics, role='Admin')
 
 
 @admin.route('/topic', methods=['GET'])
@@ -52,3 +55,34 @@ def view_admin():
   admins = user_controller.fetch_user_by_role(role='admin')
   return render_template('/pages/admin/admin/view.html', admins=admins, role='Admin')
 
+
+@admin.route('/user/create', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def create_admin():
+  user_controller.create(request=request.form, role='admin')
+  return redirect(url_for('admin.view_admin'))
+
+
+@admin.route('/user/update/<int:id>', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def update_admin(id):
+  user_controller.update(request=request.form, user_id=id)
+  return redirect(url_for('admin.view_admin'))
+
+
+@admin.route('/user/delete/<int:id>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='admin')
+def delete_admin(id):
+  user_controller.delete(user_id=id)
+  return redirect(url_for('admin.view_admin'))
+
+
+@admin.route('/reviewer', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='admin')
+def view_reviewer():
+  reviewers = user_controller.fetch_user_by_role(role='reviewer')
+  return render_template('/pages/admin/reviewer/view.html', reviewers=reviewers, role='Admin')
