@@ -1,0 +1,71 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Reviewer {% endblock %}
+
+{% block content %}
+<div class="ps-sm-3">
+  <h3 class="fw-bold mt-3">Reviewers</h3>
+  <a type="button" class="btn btn-success fw-semibold mt-3"><i class="bi bi-plus-square-fill me-2"></i> Add Reviewer</a>
+  <div class="col-11 mt-3">
+    <table id="reviewerDataTable" class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-light fw-semibold">
+        {% for reviewer in reviewers %}
+          <tr class="align-middle">
+            <td scope="col">{{ 'REV{:>04}'.format(reviewer.id) }}</td>
+            <td scope="col">{{ reviewer.name }}</td>
+            <td scope="col">{{ reviewer.email }}</td>
+            <td scope="col">
+              <a type="button" class="btn btn-primary btn-sm fw-semibold me-1"><i class="bi bi-person-square"></i> View</a>
+              <a type="button" class="btn btn-warning btn-sm fw-semibold me-1"><i class="bi bi-pencil-square"></i> Edit</a>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteAdminModal{{ reviewer.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
+            </td>
+          </tr>
+
+          <!-- Delete Reviewer Modal -->
+          <div id="deleteReviewerModal{{ reviewer.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Delete Reviewer</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="GET" enctype="multipart/form-data">
+                    <div>
+                      <label class="form-label fw-semibold">Are you sure to delete this Reviewer?</label>
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+  $('#reviewerDataTable').DataTable({
+    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  });
+});
+</script>
+{% endblock %}

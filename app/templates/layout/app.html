@@ -30,12 +30,9 @@
               ('fs-5 bi-house', 'Home', [url_for('admin.index')]),
               ('fs-5 bi-people', 'Reviewers', [
                 ('New Reviewer', ''),
-                ('View Reviewers', '')
+                ('View Reviewers', url_for('admin.view_reviewer'))
               ]),
-              ('fs-5 bi-person-lines-fill', 'Admins', [
-                ('New Admin', ''),
-                ('View Admins', url_for('admin.view_admin'))
-              ]),
+              ('fs-5 bi-person-lines-fill', 'Admins', [url_for('admin.view_admin')]),
               ('fs-5 bi-tags-fill', 'Topics', [url_for('admin.view_topic')]),
             ]-%}
           {% endif %}
@@ -61,7 +58,7 @@
               {% endif %}
             {% endfor %}
           </ul>
-          <div class="dropdown py-sm-4 mt-md-auto ms-auto ms-md-0 flex-shrink-1">
+          <div class="dropdown w-100 py-sm-4 mt-md-auto ms-auto ms-md-0 flex-shrink-1">
             <hr class="d-none d-md-block w-100 bg-dark border border-dark">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
               {% if current_user.picture_path %}
