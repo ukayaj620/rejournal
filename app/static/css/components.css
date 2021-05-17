@@ -1,0 +1,10 @@
+.card-width {
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .card-width {
+    max-width: 14rem;
+  }
+}
+
