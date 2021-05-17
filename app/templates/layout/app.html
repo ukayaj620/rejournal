@@ -1,14 +1,14 @@
 {% include "layout/head.html" %}
 
-<body class="vw-100" style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
+<body class="vh-100" style="font-family: 'Raleway', sans-serif; overflow-x: hidden;">
   <div class="container-fluid overflow-hidden">
     <div class="row vh-100 overflow-auto">
-      <div class="col-12 col-sm-4 col-md-3 col-xl-2 px-sm-1 px-0 py-1 py-sm-0 shadow-sm bg-white d-flex sticky-top">
-        <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-white">
+      <div class="col-12 col-md-3 col-xl-2 px-sm-1 px-0 py-1 py-sm-0 shadow-sm bg-white d-flex sticky-top">
+        <div class="d-flex flex-md-column flex-row flex-grow-1 align-items-center align-items-md-start px-3 pt-2 text-white">
           <a href="/" class="d-flex align-items-center py-sm-1 mb-md-0 me-md-auto text-white text-decoration-none">
-            <img class="col-9 col-sm-10 col-xl-12" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
+            <img class="col-10 col-sm-5 col-md-10 col-xl-12" src="{{ url_for('static', filename='icons/rejournal-full.svg') }}">
           </a>
-          <hr class="d-none d-sm-block w-100 bg-dark border border-dark">
+          <hr class="d-none d-md-block w-100 bg-dark border border-dark">
           {% if role == 'User' %}
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
@@ -39,18 +39,18 @@
               ('fs-5 bi-tags-fill', 'Topics', [url_for('admin.view_topic')]),
             ]-%}
           {% endif %}
-          <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
+          <ul class="nav nav-pills flex-md-column flex-row flex-nowrap flex-shrink-1 flex-md-grow-0 flex-grow-1 mb-md-auto mb-0 justify-content-center align-items-center align-items-md-start" id="menu">
             {% for icon, label, href in sidebar %}
               {% if href|length <= 1 %}
                 <li class="nav-item">
-                  <a href="{{ href[0] }}" class="nav-link text-dark px-sm-0 px-2">
-                    <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
+                  <a href="{{ href[0] }}" class="nav-link text-dark px-md-0 px-2">
+                    <i class="{{ icon }}"></i><span class="ms-1 d-none d-md-inline fw-semibold">{{ label }}</span>
                   </a>
                 </li>
               {% else %}
               <li class="dropdown">
-                <a href="#" class="nav-link text-dark dropdown-toggle px-sm-0 px-1" id="dropdownJournal" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="{{ icon }}"></i><span class="ms-1 d-none d-sm-inline fw-semibold">{{ label }}</span>
+                <a href="#" class="nav-link text-dark dropdown-toggle px-md-0 px-1" id="dropdownJournal" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="{{ icon }}"></i><span class="ms-1 d-none d-md-inline fw-semibold">{{ label }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownJournal">
                 {% for label, dropdown_href in href %}
@@ -61,11 +61,16 @@
               {% endif %}
             {% endfor %}
           </ul>
-          <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
-            <hr class="d-none d-sm-block w-100 bg-dark border border-dark">
+          <div class="dropdown py-sm-4 mt-md-auto ms-auto ms-md-0 flex-shrink-1">
+            <hr class="d-none d-md-block w-100 bg-dark border border-dark">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if current_user.picture_path %}
+              <img class="rounded-circle shadow-sm" style="object-fit: cover;" width="32px" height="32px" src="{{ url_for('static', filename='images/uploads/' + current_user.picture_path) }}">
+              <span class="d-none d-md-inline mx-1"><p class="mb-0 text-dark fw-semibold">{{ current_user.name }}</p></span>
+              {% else %}
               <i class="fs-4 bi-emoji-sunglasses-fill"></i>
-              <span class="d-none d-sm-inline mx-1"><p class="mb-0 text-dark fw-semibold">{{ current_user.name }}</p></span>
+              <span class="d-none d-md-inline mx-1"><p class="mb-0 text-dark fw-semibold">{{ current_user.name }}</p></span>
+              {% endif %}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
               <li><a style="font-size: small;" class="dropdown-item" href="/profile">Profile</a></li>
