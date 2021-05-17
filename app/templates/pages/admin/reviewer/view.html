@@ -4,8 +4,18 @@
 
 {% block content %}
 <div class="ps-sm-3">
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="position-fixed top-0 end-0 pt-3 pe-3">
+      <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert" style="z-index: 5;">
+        {{ messages[0][1] }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endif %}
+  {% endwith %}
   <h3 class="fw-bold mt-3">Reviewers</h3>
-  <a type="button" class="btn btn-success fw-semibold mt-3"><i class="bi bi-plus-square-fill me-2"></i> Add Reviewer</a>
+  <button data-bs-toggle="modal" data-bs-target="#addReviewerModal" class="btn btn-success fw-semibold mt-3"><i class="bi bi-plus-square-fill me-2"></i> Add Reviewer</button>
   <div class="col-11 mt-3">
     <table id="reviewerDataTable" class="table table-striped">
       <thead class="table-dark">
@@ -23,11 +33,109 @@
             <td scope="col">{{ reviewer.name }}</td>
             <td scope="col">{{ reviewer.email }}</td>
             <td scope="col">
-              <a type="button" class="btn btn-primary btn-sm fw-semibold me-1"><i class="bi bi-person-square"></i> View</a>
-              <a type="button" class="btn btn-warning btn-sm fw-semibold me-1"><i class="bi bi-pencil-square"></i> Edit</a>
-              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteAdminModal{{ reviewer.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
+              <button class="btn btn-primary btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#viewReviewerModal{{ reviewer.id }}"><i class="bi bi-person-square"></i> View</button>
+              <button class="btn btn-warning btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#updateReviewerModal{{ reviewer.id }}"><i class="bi bi-pencil-square"></i> Edit</button>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#deleteReviewerModal{{ reviewer.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
             </td>
           </tr>
+
+          <!-- View Reviewer Modal -->
+          <div id="viewReviewerModal{{ reviewer.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">View Reviewer</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column flex-md-row justify-content-center align-items-center">
+                  <div class="col-12 col-md-6 d-flex flex-row justify-content-center align-items-center">
+                    {% if reviewer.picture_path %}
+                    <img class="rounded-circle shadow-sm" width="240px" height="240px" style="object-fit: cover;" src="{{ url_for('static', filename='images/uploads/' + reviewer.picture_path) }}">
+                    {% else %}
+                    <img class="rounded-circle shadow-sm" width="240px" height="240px" src="{{ url_for('static', filename='icons/profile.svg') }}">
+                    {% endif %}
+                  </div>
+                  <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Name</label>
+                      <p class="fs-6 fw-bold text-dark">{{ reviewer.name }}</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Email</label>
+                      <a class="text-decoration-none" href="mailto:{{ reviewer.email }}">
+                        <p class="fs-6 fw-bold">{{ reviewer.email }}</p>
+                      </a>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Telephone</label>
+                      <p class="fs-6 fw-bold text-dark">{{ reviewer.telephone }}</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Gender</label>
+                      {% if reviewer.gender == 'M' %}
+                        <p class="fs-6 fw-bold text-primary"><i class="fs-6 bi-gender-male"></i> Male</p>
+                      {% else %}
+                        <p class="fs-6 fw-bold text-danger"><i class="fs-6 bi-gender-female"></i> Female</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Update Reviewer Modal -->
+          <div id="updateReviewerModal{{ reviewer.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Update Reviewer</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form class="d-flex flex-column justify-content-center align-items-center fw-semibold" action="{{ url_for('admin.update_reviewer', id=reviewer.id) }}" method="POST">
+                    <div class="mb-2 w-100">
+                      <label for="input-email" class="form-label fw-semibold">Name</label>
+                      <input type="text" class="form-control" id="input-email" value="{{ reviewer.name }}" name="name" required>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-email" class="form-label fw-semibold">Email address</label>
+                      <input type="email" class="form-control" id="input-email" value="{{ reviewer.email }}" name="email" required>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-email" class="form-label fw-semibold">Telephone</label>
+                      <input type="text" class="form-control" id="input-email" value="{{ reviewer.telephone }}" name="telephone" required>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="options" class="form-label fw-semibold">Gender</label>
+                      <div id="options" class="w-100 d-flex flex-row justify-content-start">
+                        {% set gender = [
+                          ('M', 'Male', 'male-radio'),
+                          ('F', 'Female', 'female-radio')
+                        ] -%}
+                  
+                        {% for code, label, id in gender %}
+                          <div class="form-check me-4">
+                            <input class="form-check-input" type="radio" name="gender" id="{{ id }}" value="{{ code }}" {% if reviewer.gender == code %} checked {% endif %}>
+                            <label class="form-check-label" for="{{ id }}">
+                              {{ label }}
+                            </label>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold border-2 border-dark">Update Profile</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Delete Reviewer Modal -->
           <div id="deleteReviewerModal{{ reviewer.id }}" class="modal fade" role="dialog">
@@ -38,9 +146,9 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form action="" method="GET" enctype="multipart/form-data">
+                  <form action="{{ url_for('admin.delete_reviewer', id=reviewer.id) }}" method="GET">
                     <div>
-                      <label class="form-label fw-semibold">Are you sure to delete this Reviewer?</label>
+                      <label class="form-label fw-semibold">Are you sure to delete this reviewer?</label>
                     </div>
                     <div class="mb-2 mt-4 w-100">
                       <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
@@ -56,6 +164,56 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
+
+  <!-- Add Reviewer Modal -->
+  <div id="addReviewerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">New Reviewer</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="d-flex flex-column justify-content-center align-items-center fw-semibold" action="{{ url_for('admin.create_reviewer') }}" method="POST">
+            <div class="mb-2 w-100">
+              <label for="input-email" class="form-label">Name</label>
+              <input type="text" class="form-control" id="input-email" name="name" required>
+            </div>
+            <div class="mb-2 w-100">
+              <label for="input-email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="input-email" name="email" required>
+            </div>
+            <div class="mb-2 w-100">
+              <label for="input-email" class="form-label">Telephone</label>
+              <input type="text" class="form-control" id="input-email" name="telephone" required>
+            </div>
+            <div class="mb-2 w-100">
+              <label for="options" class="form-label">Gender</label>
+              <div id="options" class="w-100 d-flex flex-row justify-content-start">
+                {% set gender = [
+                  ('M', 'Male', 'male-radio'),
+                  ('F', 'Female', 'female-radio')
+                ] -%}
+          
+                {% for code, label, id in gender %}
+                  <div class="form-check me-4">
+                    <input class="form-check-input" type="radio" name="gender" id="{{ id }}" value="{{ code }}">
+                    <label class="form-check-label" for="{{ id }}">
+                      {{ label }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold border-2 border-dark">Create Profile</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

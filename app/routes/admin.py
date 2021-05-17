@@ -86,3 +86,27 @@ def delete_admin(id):
 def view_reviewer():
   reviewers = user_controller.fetch_user_by_role(role='reviewer')
   return render_template('/pages/admin/reviewer/view.html', reviewers=reviewers, role='Admin')
+
+
+@admin.route('/reviewer/create', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def create_reviewer():
+  user_controller.create(request=request.form, role='reviewer')
+  return redirect(url_for('admin.view_reviewer'))
+
+
+@admin.route('/reviewer/update/<int:id>', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def update_reviewer(id):
+  user_controller.update(request=request.form, user_id=id)
+  return redirect(url_for('admin.view_reviewer'))
+
+
+@admin.route('/reviewer/delete/<int:id>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='admin')
+def delete_reviewer(id):
+  user_controller.delete(user_id=id)
+  return redirect(url_for('admin.view_admin'))

@@ -28,10 +28,7 @@
           {% elif role == 'Admin' %}
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', [url_for('admin.index')]),
-              ('fs-5 bi-people', 'Reviewers', [
-                ('New Reviewer', ''),
-                ('View Reviewers', url_for('admin.view_reviewer'))
-              ]),
+              ('fs-5 bi-people', 'Reviewers', [url_for('admin.view_reviewer')]),
               ('fs-5 bi-person-lines-fill', 'Admins', [url_for('admin.view_admin')]),
               ('fs-5 bi-tags-fill', 'Topics', [url_for('admin.view_topic')]),
             ]-%}
