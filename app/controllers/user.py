@@ -4,7 +4,7 @@ import random
 import string
 from app.models.user import User
 from app.models.role import Role
-from app.utils.image import save_image, delete_image
+from app.utils.file import save_image, delete_image
 from app.utils.mailer import send_account_credential
 from flask_login import current_user
 
