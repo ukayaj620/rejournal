@@ -3,14 +3,33 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+import click
 from app.config import Config
-
 
 db = SQLAlchemy()
 mail = Mail()
 
 def create_app():
   app = Flask(__name__)
+
+  @app.cli.command('seed')
+  @click.argument('args')
+  def seed(args):
+    if args == 'status':
+      status = Status()
+      status.create(name='In Review')
+      status.create(name='Rejected')
+      status.create(name='Accepted')
+      print('Status has been seeded')
+      return 
+
+    if args == 'role':
+      role = Role()
+      role.create(name='user')
+      role.create(name='admin')
+      role.create(name='reviewer')
+      print('Role has been seeded')
+      return 
 
   app.config.from_object(Config)
 
@@ -26,6 +45,9 @@ def create_app():
 
   from app.models.user import User
   from app.models.verification import Verification
+  from app.models.role import Role
+  from app.models.status import Status
+  from app.models.topic import Topic
 
   @login_manager.user_loader
   def load_user(user_id):
