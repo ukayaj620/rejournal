@@ -47,7 +47,7 @@ def save_doc(doc):
     file_ext = os.path.splitext(filename)[1].lower()
     doc_filename = generate_filename(file_ext)
     if file_ext not in Config.UPLOAD_DOC_EXTENSIONS:
-      abort(400)
+      return None
 
     if not os.path.exists(Config.UPLOAD_DOC_PATH):
       os.mkdir(os.path.join(Config.UPLOAD_DOC_DIR, 'uploads'))

@@ -1,0 +1,113 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | New Journal {% endblock %}
+
+{% block content %}
+<div class="ps-sm-3">
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="position-fixed top-0 end-0 pt-3 pe-3">
+      <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert" style="z-index: 5;">
+        {{ messages[0][1] }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endif %}
+  {% endwith %}
+  <h3 class="fw-bold my-3">Upload New Journal</h3>
+  <form action="{{ url_for('home.journal_create') }}" class="col-12 col-md-11 d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST" enctype="multipart/form-data">
+    <p class="fs-5 fw-bold w-100">Journal Details</p>
+    <div class="mb-2 w-100">
+      <label for="input-title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="input-title" name="title" required>
+    </div>
+    <div class="mb-2 w-100">
+      <label for="input-abstract" class="form-label">Abstract</label>
+      <textarea type="text" class="form-control" id="input-abstract" name="abstract" required></textarea>
+    </div>
+    <div class="mb-2 w-100">
+      <label class="form-label fw-bold" for="input-photo">Document<span style="font-size:x-small;">    (*.pdf, *.doc, *docx)</span></label>
+      <input type="file" class="form-control" id="input-doc" name="doc" required>
+    </div>
+    <div class="mb-2 w-100">
+      <label class="form-label fw-bold">Topic</label>
+      <select class="form-select" id="topic" name="topic" required>
+        {% for topic in topics %}
+        <option value="{{ topic.id }}">{{ topic.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <p class="fs-5 fw-bold mt-2 mb-0 w-100">Authors</p>
+    <div id="inputAuthors" class="mb-2 w-100">
+      <div id="inputAuthorRow-1" class="mb-2 w-100 d-flex flex-column justify-content-center align-items-center">
+        <div class="mb-2 w-100 d-flex flex-row align-items-center justify-content-between">
+          <p class="fs-5 fw-semibold mb-0">Author</p>
+          <a href="javascript:void(0);" type="button" id="addNewAuthorRow" class="btn btn-sm fw-semibold btn-success align-self-end">Add New Author</a>
+        </div>
+        <div class="mb-2 w-100 d-flex flex-column flex-md-row align-items-center">
+          <div class="w-100 d-flex flex-column">
+            <label for="input-name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="input-name" name="names[]" required>
+          </div>
+          <div class="w-100 d-flex flex-column mx-2">
+            <label for="input-email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="input-email" name="emails[]" required>
+          </div>
+          <div class="w-100 d-flex flex-column">
+            <label for="input-email" class="form-label">Institution</label>
+            <input type="text" class="form-control" id="input-email" name="institutions[]" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary w-100 fw-bold mt-2 mb-5" type="submit">Upload</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(() => {
+    const wrapper = $("#inputAuthors");
+    const addRowButton = $("#addNewAuthorRow");
+    
+    const current = () => $(wrapper).children().length;
+
+    $(addRowButton).click((e) => {
+
+      const next = current() + 1;
+
+      e.preventDefault()
+      $(wrapper).append(
+        `
+        <div id="inputAuthorRow-`+ next + `" class="mb-2 w-100 d-flex flex-column justify-content-center align-items-center">
+          <div class="mb-2 w-100 d-flex flex-row align-items-center justify-content-between">
+            <p class="fs-5 fw-semibold mb-0">Author</p>
+            <a href="javascript:void(0);" type="button" id="` + next + `" class="removeNewAuthorRow btn btn-sm fw-semibold btn-danger align-self-end">Remove Author</a>
+          </div>
+          <div class="mb-2 w-100 d-flex flex-column flex-md-row align-items-center">
+            <div class="w-100 d-flex flex-column">
+              <label for="input-name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="input-name" name="names[]" required>
+            </div>
+            <div class="w-100 d-flex flex-column mx-2">
+              <label for="input-email" class="form-label">Email</label>
+              <input type="text" class="form-control" id="input-email" name="emails[]" required>
+            </div>
+            <div class="w-100 d-flex flex-column">
+              <label for="input-email" class="form-label">Institution</label>
+              <input type="text" class="form-control" id="input-email" name="institutions[]" required>
+            </div>
+          </div>
+        </div>
+      `
+      );
+    });
+
+    $(wrapper).on("click", ".removeNewAuthorRow", (e) => {
+      e.preventDefault();
+      $(wrapper).children("#inputAuthorRow-" + e.target.id).remove()
+    });
+  })
+</script>
+{% endblock %}

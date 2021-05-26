@@ -22,6 +22,7 @@ def create_app():
       status.create(name='In Review')
       status.create(name='Rejected')
       status.create(name='Accepted')
+      status.create(name='Published')
       print('Status has been seeded')
       return 
 
@@ -65,6 +66,10 @@ def create_app():
   from app.models.role import Role
   from app.models.status import Status
   from app.models.topic import Topic
+  from app.models.journal import Journal
+  from app.models.author import Author
+  from app.models.journal_log import JournalLog
+  from app.models.reviewer import Reviewer
 
   @login_manager.user_loader
   def load_user(user_id):
