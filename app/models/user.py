@@ -15,20 +15,21 @@ class User(UserMixin, db.Model):
   role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), unique=False, nullable=False)
   picture_path = db.Column(db.String(255), nullable=True)
   verification = db.relationship('Verification', backref='user', lazy=True)
+  journal = db.relationship('Journal', backref='user', lazy=True, cascade='delete,delete-orphan')
   reviewer = db.relationship('Reviewer', uselist=False, backref='user', lazy=True, cascade='delete,delete-orphan')
   role = db.relationship('Role', back_populates='user', lazy=True)
 
   def __repr__(self):
     return '<User %r>' % self.name
 
-  def create(self, name, email, telephone, password, gender, role_id):
+  def create(self, name, email, telephone, password, gender, role_id, is_verified=None):
     user = User(
       name=name,
       email=email,
       telephone=telephone,
       password=password,
       gender=gender,
-      is_verified=0,
+      is_verified= 0 if is_verified is None else is_verified,
       registered_date=datetime.now(),
       role_id=role_id
     )

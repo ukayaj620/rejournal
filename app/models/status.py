@@ -3,6 +3,7 @@ from app import db
 class Status(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   name = db.Column(db.String(255), unique=False, nullable=False)
+  journal_log = db.relationship('JournalLog', backref='status', lazy=True)
 
   def __repr__(self):
     return '<Status %r>' % self.name
