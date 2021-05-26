@@ -15,6 +15,8 @@ class User(UserMixin, db.Model):
   role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), unique=False, nullable=False)
   picture_path = db.Column(db.String(255), nullable=True)
   verification = db.relationship('Verification', backref='user', lazy=True)
+  reviewer = db.relationship('Reviewer', uselist=False, backref='user', lazy=True, cascade='delete,delete-orphan')
+  role = db.relationship('Role', back_populates='user', lazy=True)
 
   def __repr__(self):
     return '<User %r>' % self.name

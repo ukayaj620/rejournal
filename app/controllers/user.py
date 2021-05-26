@@ -1,12 +1,13 @@
 from flask import redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import current_user
 import random
 import string
 from app.models.user import User
 from app.models.role import Role
+from app.models.reviewer import Reviewer
 from app.utils.file import save_image, delete_image
 from app.utils.mailer import send_account_credential
-from flask_login import current_user
 
 
 class UserController:
@@ -14,6 +15,7 @@ class UserController:
   def __init__(self):
     self.user = User()
     self.role = Role()
+    self.reviewer = Reviewer()
 
   def fetch_user_by_role(self, role):
     role_id = self.role.query.filter_by(name=role).first().id
@@ -43,6 +45,14 @@ class UserController:
       role_id=self.role.query.filter_by(name=role).first().id
     )
 
+    if role == 'reviewer':
+      user = self.user.query.filter_by(email=request['email']).first()
+      
+      self.reviewer.create(
+        user_id=user.id,
+        topic_id=request['topic']
+      )
+
     send_account_credential(to=request['email'], password=password)
     return flash('User has been created, credentials has been sent to user.', 'info')
 
@@ -54,6 +64,14 @@ class UserController:
       gender=request['gender'],
       id=user_id
     )
+
+    user = self.user.query.filter_by(email=request['email']).first()
+    if user.role.name == 'reviewer':
+      
+      self.reviewer.update(
+        user_id=user.id,
+        topic_id=request['topic']
+      )
 
   def update_profile_image(self, photo, user_id):
     user = self.get_profile(user_id=user_id)

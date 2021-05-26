@@ -24,29 +24,32 @@ def index():
 @login_required
 @role_checker.check_permission(role='admin')
 def view_topic():
-  return topic_controller.fetch_all()
+  topics = topic_controller.fetch_all()
+  return render_template('pages/admin/topic/view.html', topics=topics, role='Admin')
 
 
 @admin.route('/topic/create', methods=['POST'])
 @login_required
 @role_checker.check_permission(role='admin')
 def create_topic():
-  return topic_controller.create(request=request.form)
+  topic_controller.create(request=request.form)
+  return redirect(url_for('admin.view_topic'))
 
 
 @admin.route('/topic/update/<int:id>', methods=['POST'])
 @login_required
 @role_checker.check_permission(role='admin')
 def update_topic(id):
-  return topic_controller.update(request=request.form, topic_id=id)
+  topic_controller.update(request=request.form, topic_id=id)
+  return redirect(url_for('admin.view_topic'))
 
 
 @admin.route('/topic/delete/<int:id>', methods=['GET'])
 @login_required
 @role_checker.check_permission(role='admin')
 def delete_topic(id):
-  return topic_controller.delete(topic_id=id)
-
+  topic_controller.delete(topic_id=id)
+  return redirect(url_for('admin.view_topic'))
 
 @admin.route('/user', methods=['GET'])
 @login_required
@@ -85,7 +88,8 @@ def delete_admin(id):
 @role_checker.check_permission(role='admin')
 def view_reviewer():
   reviewers = user_controller.fetch_user_by_role(role='reviewer')
-  return render_template('/pages/admin/reviewer/view.html', reviewers=reviewers, role='Admin')
+  topics = topic_controller.fetch_all()
+  return render_template('/pages/admin/reviewer/view.html', reviewers=reviewers, role='Admin', topics=topics)
 
 
 @admin.route('/reviewer/create', methods=['POST'])
@@ -109,4 +113,4 @@ def update_reviewer(id):
 @role_checker.check_permission(role='admin')
 def delete_reviewer(id):
   user_controller.delete(user_id=id)
-  return redirect(url_for('admin.view_admin'))
+  return redirect(url_for('admin.view_reviewer'))

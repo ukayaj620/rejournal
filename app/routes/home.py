@@ -9,4 +9,4 @@ role_checker = RoleChecker()
 @login_required
 @role_checker.check_permission(role='user')
 def index():
-  return render_template('pages/index.html', role='User')
+  return render_template('pages/user/index.html', role='User')

@@ -23,6 +23,7 @@
           <th scope="col">ID</th>
           <th scope="col">Name</th>
           <th scope="col">Email</th>
+          <th scope="col">Expertise</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -32,6 +33,7 @@
             <td scope="col">{{ 'REV{:>04}'.format(reviewer.id) }}</td>
             <td scope="col">{{ reviewer.name }}</td>
             <td scope="col">{{ reviewer.email }}</td>
+            <td scope="col">{{ reviewer.reviewer.topic.name }}</td>
             <td scope="col">
               <button class="btn btn-primary btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#viewReviewerModal{{ reviewer.id }}"><i class="bi bi-person-square"></i> View</button>
               <button class="btn btn-warning btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#updateReviewerModal{{ reviewer.id }}"><i class="bi bi-pencil-square"></i> Edit</button>
@@ -56,27 +58,31 @@
                     {% endif %}
                   </div>
                   <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
-                    <div class="mb-2 w-100">
+                    <div class="w-100">
                       <label class="form-label fw-semibold">Name</label>
                       <p class="fs-6 fw-bold text-dark">{{ reviewer.name }}</p>
                     </div>
-                    <div class="mb-2 w-100">
+                    <div class="w-100">
                       <label class="form-label fw-semibold">Email</label>
                       <a class="text-decoration-none" href="mailto:{{ reviewer.email }}">
                         <p class="fs-6 fw-bold">{{ reviewer.email }}</p>
                       </a>
                     </div>
-                    <div class="mb-2 w-100">
+                    <div class="w-100">
                       <label class="form-label fw-semibold">Telephone</label>
                       <p class="fs-6 fw-bold text-dark">{{ reviewer.telephone }}</p>
                     </div>
-                    <div class="mb-2 w-100">
+                    <div class="w-100">
                       <label class="form-label fw-semibold">Gender</label>
                       {% if reviewer.gender == 'M' %}
                         <p class="fs-6 fw-bold text-primary"><i class="fs-6 bi-gender-male"></i> Male</p>
                       {% else %}
                         <p class="fs-6 fw-bold text-danger"><i class="fs-6 bi-gender-female"></i> Female</p>
                       {% endif %}
+                    </div>
+                    <div class="w-100">
+                      <label class="form-label fw-semibold">Expertise</label>
+                      <p class="fs-6 fw-bold text-dark">{{ reviewer.reviewer.topic.name }}</p>
                     </div>
                   </div>
                 </div>
@@ -126,6 +132,14 @@
                           </div>
                         {% endfor %}
                       </div>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-bold">Expertise</label>
+                      <select class="form-select" id="topic" name="topic" required>
+                        {% for topic in topics %}
+                        <option value="{{ topic.id }}" {% if topic.id == reviewer.reviewer.topic.id %} selected {% endif %}>{{ topic.name }}</option>
+                        {% endfor %}
+                      </select>
                     </div>
                     <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold border-2 border-dark">Update Profile</button>
                   </form>
@@ -205,6 +219,14 @@
                   </div>
                 {% endfor %}
               </div>
+            </div>
+            <div class="mb-2 w-100">
+              <label class="form-label fw-bold">Expertise</label>
+              <select class="form-select" id="topic" name="topic" required>
+                {% for topic in topics %}
+                <option value="{{ topic.id }}">{{ topic.name }}</option>
+                {% endfor %}
+              </select>
             </div>
             <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold border-2 border-dark">Create Profile</button>
           </form>

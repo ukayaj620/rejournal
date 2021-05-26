@@ -4,7 +4,7 @@ from app import db
 class Role(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   name = db.Column(db.String(255), unique=False, nullable=False)
-  user = db.relationship('User', backref='role', lazy=True)
+  user = db.relationship('User', back_populates='role', lazy=True)
 
   def __repr__(self):
     return '<Role %r>' % self.name
