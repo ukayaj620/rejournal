@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+from datetime import datetime
+from werkzeug.security import generate_password_hash
 import click
 from app.config import Config
 
@@ -29,6 +31,21 @@ def create_app():
       role.create(name='admin')
       role.create(name='reviewer')
       print('Role has been seeded')
+      return 
+
+    if args == 'admin':
+      user = User()
+      role = Role()
+      user.create(
+        name='Rejournal Admin',
+        email='adm.rejournal@gmail.com',
+        telephone='081239567845',
+        password=generate_password_hash(Config.ADMIN_PASSWORD, method='sha256'),
+        gender='M',
+        is_verified=1,
+        role_id=role.query.filter_by(name='admin').first().id
+      )
+      print('Admin has been seeded')
       return 
 
   app.config.from_object(Config)
