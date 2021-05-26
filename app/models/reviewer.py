@@ -4,7 +4,7 @@ from app import db
 class Reviewer(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), unique=True, nullable=False)
-  topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), unique=False, nullable=False)
+  topic_id = db.Column(db.Integer, db.ForeignKey('topic.id', ondelete='SET NULL'), unique=False, nullable=True)
   journal_log = db.relationship('JournalLog', backref='reviewer', lazy=True)
   topic = db.relationship('Topic', back_populates='reviewer', lazy=True)
 
