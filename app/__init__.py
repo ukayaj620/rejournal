@@ -19,10 +19,11 @@ def create_app():
   def seed(args):
     if args == 'status':
       status = Status()
-      status.create(name='In Review')
-      status.create(name='Rejected')
-      status.create(name='Accepted')
-      status.create(name='Published')
+      status.create(name='Submitted', color='text-info')
+      status.create(name='In Review', color='text-warning')
+      status.create(name='Rejected', color='text-danger')
+      status.create(name='Accepted', color='text-primary')
+      status.create(name='Published', color='text-success')
       print('Status has been seeded')
       return 
 
