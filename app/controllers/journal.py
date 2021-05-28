@@ -1,10 +1,12 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, send_file
 from flask_login import current_user
+import os
 from app.models.journal import Journal
 from app.models.journal_log import JournalLog
 from app.models.author import Author
 from app.models.status import Status
 from app.utils.file import save_doc
+from app.config import Config
 
 
 class JournalController:
@@ -15,8 +17,13 @@ class JournalController:
     self.status = Status()
     self.journal_log = JournalLog()
 
-  def create(self, request, doc):
+  def fetch_by_id(self, journal_id):
+    return self.journal.query.filter_by(id=journal_id).first()
 
+  def fetch_all(self):
+    return self.journal.query.filter_by(user_id=current_user.id).all()
+
+  def create(self, request, doc):
     doc_path = save_doc(doc)
 
     if doc_path is None:
@@ -33,7 +40,7 @@ class JournalController:
 
     self.journal_log.create(
       journal_id=journal.id,
-      status_id=self.status.query.filter_by(name='In Review').first().id
+      status_id=self.status.query.filter_by(name='Submitted').first().id
     )
 
     authors_name = request.getlist('names[]')
@@ -50,3 +57,8 @@ class JournalController:
       )
 
     return redirect(url_for('home.journal_create'))
+
+  def download(self, filename):
+    directory = os.path.join('static/docs/uploads', filename)
+    print(directory)
+    return send_file(directory, as_attachment=True)

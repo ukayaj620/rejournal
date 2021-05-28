@@ -5,9 +5,10 @@ from datetime import datetime
 class JournalLog(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   journal_id = db.Column(db.Integer, db.ForeignKey('journal.id', ondelete='CASCADE'), unique=True, nullable=False)
-  status_id = db.Column(db.Integer, db.ForeignKey('status.id', ondelete='CASCADE'), unique=False, nullable=False)
-  reviewer_id = db.Column(db.Integer, db.ForeignKey('reviewer.id', ondelete='CASCADE'), unique=False, nullable=True)
+  status_id = db.Column(db.Integer, db.ForeignKey('status.id', ondelete='SET NULL'), unique=False, nullable=True)
+  reviewer_id = db.Column(db.Integer, db.ForeignKey('reviewer.id', ondelete='SET NULL'), unique=False, nullable=True)
   timestamp = db.Column(db.DateTime, unique=False, nullable=False)
+  status = db.relationship('Status', back_populates='journal_log', lazy=True)
 
   def __repr__(self):
     return '<Journal Log %r>' % self.journal_id

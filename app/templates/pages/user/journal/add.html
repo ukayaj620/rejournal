@@ -16,7 +16,7 @@
   {% endwith %}
   <h3 class="fw-bold my-3">Upload New Journal</h3>
   <form action="{{ url_for('home.journal_create') }}" class="col-12 col-md-11 d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST" enctype="multipart/form-data">
-    <p class="fs-5 fw-bold w-100">Journal Details</p>
+    <p class="fs-5 fw-bold w-100 mb-2">Journal Details</p>
     <div class="mb-2 w-100">
       <label for="input-title" class="form-label">Title</label>
       <input type="text" class="form-control" id="input-title" name="title" required>

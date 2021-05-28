@@ -14,7 +14,7 @@
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-journals', 'Journal', [
                 ('New Journal', url_for('home.journal_create')),
-                ('View Journals', '')
+                ('View Journals', url_for('home.journal_view'))
               ]),
             ]-%}
           {% elif role == 'Reviewer' %}

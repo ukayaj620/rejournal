@@ -9,9 +9,9 @@ class Journal(db.Model):
   journal_path = db.Column(db.String(255), unique=False, nullable=False)
   upload_time = db.Column(db.DateTime, nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), unique=False, nullable=False)
-  topic_id = db.Column(db.Integer, db.ForeignKey('topic.id', ondelete='CASCADE'), unique=False, nullable=False)
+  topic_id = db.Column(db.Integer, db.ForeignKey('topic.id', ondelete='SET NULL'), unique=False, nullable=True)
   author = db.relationship('Author', backref='journal', lazy=True)
-  journal_log = db.relationship('JournalLog', backref='journal', lazy=True)
+  journal_log = db.relationship('JournalLog', uselist=False, backref='journal', lazy=True)
 
   def __repr__(self):
     return '<Journal %r>' % self.name

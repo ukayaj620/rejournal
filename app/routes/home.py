@@ -18,6 +18,24 @@ def index():
   return render_template('pages/user/index.html', role='User')
 
 
+@home.route('/journal/', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='user')
+def journal_view():
+  journals = journal_controller.fetch_all()
+  topics = topic_controller.fetch_all()
+  return render_template('pages/user/journal/view.html', role='User', topics=topics, journals=journals)
+
+
+@home.route('/journal/detail/<id>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='user')
+def journal_view_detail(id):
+  journal = journal_controller.fetch_by_id(journal_id=id)
+  topics = topic_controller.fetch_all()
+  return render_template('pages/user/journal/detail.html', role='User', topics=topics, journal=journal)
+
+
 @home.route('/journal/create', methods=['GET', 'POST'])
 @login_required
 @role_checker.check_permission(role='user')
@@ -27,4 +45,11 @@ def journal_create():
   
   topics = topic_controller.fetch_all()
   return render_template('pages/user/journal/add.html', role='User', topics=topics)
+
+
+@home.route('/journal/download/<filename>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='user')
+def journal_download(filename):
+  return journal_controller.download(filename)
   
