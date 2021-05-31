@@ -23,6 +23,9 @@ class JournalController:
   def fetch_all(self):
     return self.journal.query.filter_by(user_id=current_user.id).all()
 
+  def fetch_statuses(self):
+    return self.status.query.all()
+
   def create(self, request, doc):
     doc_path = save_doc(doc)
 

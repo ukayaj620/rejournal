@@ -24,7 +24,8 @@ def index():
 def journal_view():
   journals = journal_controller.fetch_all()
   topics = topic_controller.fetch_all()
-  return render_template('pages/user/journal/view.html', role='User', topics=topics, journals=journals)
+  statuses = journal_controller.fetch_statuses()
+  return render_template('pages/user/journal/view.html', role='User', topics=topics, journals=journals, statuses=statuses)
 
 
 @home.route('/journal/detail/<id>', methods=['GET'])

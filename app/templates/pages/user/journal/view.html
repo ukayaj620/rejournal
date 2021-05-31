@@ -5,8 +5,17 @@
 {% block content %}
 <div class="ps-sm-3 pb-5">
   <h3 class="fw-bold my-3">My Journals</h3>
-  <div class="col-12 col-md-11">
-    <input id="searchJournal" class="form-control col-12 col-md-11 mb-4" type="text" placeholder="Search Your Journal...">
+  <div class="col-12 col-md-11 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
+    <div class="col-12 col-md-7">
+      <input id="searchJournal" class="form-control" type="text" placeholder="Search Your Journal...">
+    </div>
+    <div class="col-12 col-md-4">
+      <select id="filterJournal" class="form-select">
+        {% for status in statuses %}
+        <option value="{{ status.id }}">{{ status.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
   </div>
   <div id="myJournals" class="col-12 col-md-11">
     {% for journal in journals %}
@@ -21,7 +30,7 @@
         </p>
         {% endfor %}
       </div>
-      <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Status: <span class="{{ journal.journal_log.status.color }}">{{ journal.journal_log.status.name }}</span></p>
+      <p id="status" style="font-size: medium;" class="fw-semibold me-2 mb-0">Status: <span class="{{ journal.journal_log.status.color }}">{{ journal.journal_log.status.name }}</span></p>
       <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Last updated: <span class="text-secondary">{{ journal.journal_log.timestamp }}</span></p>
       <div class="d-flex align-items-center mt-2">
         <a href="{{ url_for('home.journal_download', filename=journal.journal_path) }}" target="_blank" type="button" class="btn btn-sm fw-semibold me-2 ms-auto text-primary"><i class="bi bi-download"></i> Download File</a>
@@ -65,13 +74,20 @@
 <script>
   $(document).ready(function() {
     $("#searchJournal").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      console.log(value)
+      var search = $(this).val().toLowerCase();
       $("#myJournals div").filter(function() {
-        console.log($(this).find("#title").text())
-        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(value) > -1)
+        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1)
       });
-    })
-  })
+    });
+
+    $("#filterJournal").on("change", function() {
+      var filter = $(this).children("option:selected").text().toLowerCase();
+      console.log(filter);
+      $("#myJournals div").filter(function() {
+        console.log($(this).find("#status span").text().toLowerCase());
+        $(this).toggle($(this).find("#status span").text().toLowerCase() === filter);
+      });
+    });
+  });
 </script>
 {% endblock  %}
