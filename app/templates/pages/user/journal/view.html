@@ -6,9 +6,12 @@
 <div class="ps-sm-3 pb-5">
   <h3 class="fw-bold my-3">My Journals</h3>
   <div class="col-12 col-md-11">
+    <input id="searchJournal" class="form-control col-12 col-md-11 mb-3" type="text" placeholder="Search Your Journal...">
+  </div>
+  <div id="myJournals" class="col-12 col-md-11">
     {% for journal in journals %}
-    <div style="border-radius: 16px;" class="shadow-sm p-3">
-      <p class="fs-4 fw-bold mb-1">{{ journal.title }}</p>
+    <div style="border-radius: 16px;" class="border border-2 px-3 py-2">
+      <p id="title" class="fs-4 fw-bold mb-1">{{ journal.title }}</p>
       <div class="d-flex align-items-center flex-row flex-wrap">
         <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Author: </p>
         {% for author in journal.author %}
@@ -57,3 +60,18 @@
   </div>
 </div>
 {% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $("#searchJournal").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      console.log(value)
+      $("#myJournals div").filter(function() {
+        console.log($(this).find("#title").text())
+        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(value) > -1)
+      });
+    })
+  })
+</script>
+{% endblock  %}

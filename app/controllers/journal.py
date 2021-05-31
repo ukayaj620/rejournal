@@ -56,7 +56,7 @@ class JournalController:
         journal_id=journal.id
       )
 
-    return redirect(url_for('home.journal_create'))
+    return redirect(url_for('home.journal_view_detail', id=journal.id))
   
   def update(self, request, doc):
     doc_path = save_doc(doc) if doc else None
