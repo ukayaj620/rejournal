@@ -23,8 +23,34 @@
       <div class="d-flex align-items-center mt-1">
         <a href="{{ url_for('home.journal_download', filename=journal.journal_path) }}" target="_blank" type="button" class="btn btn-sm fw-semibold me-2 ms-auto text-primary"><i class="bi bi-download"></i> Download File</a>
         <a href="{{ url_for('home.journal_view_detail', id=journal.id) }}" type="button" class="btn btn-primary btn-sm fw-semibold me-2"><i class="bi bi-file-earmark"></i> View Detail</a>
-        <a type="button" class="btn btn-warning btn-sm fw-semibold me-2"><i class="bi bi-pencil-square"></i> Edit</a>
+        <a href="{{ url_for('home.journal_update', id=journal.id) }}" type="button" class="btn btn-warning btn-sm fw-semibold me-2"><i class="bi bi-pencil-square"></i> Edit</a>
         <button class="btn btn-danger btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#deleteJournal{{ journal.id }}"><i class="bi bi-trash-fill"></i> Delete</button>
+      </div>
+    </div>
+
+    <!-- Delete Journal Modal -->
+    <div id="deleteJournal{{ journal.id }}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title fw-bold">Delete Journal</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="POST">
+              <input type="hidden" class="form-control" id="input-id" name="id" value="{{ journal.id }}" required>
+              <div>
+                <label class="form-label fw-semibold">Are you sure to delete this journal with title "{{ journal.title }}"?</label>
+              </div>
+              <div class="mb-2 mt-4 w-100">
+                <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
     {% endfor %}

@@ -4,15 +4,19 @@
 
 {% block content %}
 <div class="ps-sm-3 pb-5">
-  <nav class="fw-semibold mt-4" aria-label="breadcrumb">
-    <ol class="breadcrumb">
+  <nav class="col-12 col-md-11 d-flex mt-4 flex-column flex-md-row justify-content-between align-items-start align-items-md-center" aria-label="breadcrumb">
+    <ol class="breadcrumb fw-semibold col-12 col-md-6 d-flex flex-row">
       <li class="breadcrumb-item fw-semibold text-decoration-none"><a href="{{ url_for('home.journal_view') }}">My Journal</a></li>
       <li class="breadcrumb-item fw-semibold active" aria-current="page">{{ journal.title }}</li>
     </ol>
+    <div class="col-12 col-md-6 d-flex flex-row">
+      <a href="{{ url_for('home.journal_update', id=journal.id) }}" type="button" class="btn btn-warning btn-sm fw-semibold me-2 ms-auto"><i class="bi bi-pencil-square"></i> Edit</a>
+      <button class="btn btn-danger btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#deleteJournal"><i class="bi bi-trash-fill"></i> Delete</button>
+    </div>
   </nav>
   <h3 class="fw-bold mt-4">{{ journal.title }}</h3>
   <div class="d-flex flex-column mt-3 col-12 col-md-11">
-    <h5 class="fw-semibold">Abstact: </h5>
+    <h5 class="fw-semibold">Abstract: </h5>
     <h6 class="me-2 mb-0" style="text-align: justify;">
       {{ journal.abstract }}
     </h6>
@@ -33,10 +37,35 @@
     </div>
     {% endfor %}
   </div>
+  <!-- Delete Journal Modal -->
+  <div id="deleteJournal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">Delete Journal</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="POST">
+            <input type="hidden" class="form-control" id="input-id" name="id" value="{{ journal.id }}" required>
+            <div>
+              <label class="form-label fw-semibold">Are you sure to delete this journal?</label>
+            </div>
+            <div class="mb-2 mt-4 w-100">
+              <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="col-12 col-md-11 d-flex flex-column align-items-center justify-content-center mt-3">
     <h5 class="fw-semibold align-self-start">PDF: </h5>
-    <iframe class="col-12 px-3 py-2 px-md-0 vh-100" src="{{ url_for('static', filename='docs/uploads/' + journal.journal_path) }}">
+    <iframe class="col-12 py-2 px-md-0 vh-100" src="{{ url_for('static', filename='docs/uploads/' + journal.journal_path) }}#toolbar=0">
   </div>
-  </iframe>
+
 </div>
 {% endblock %}

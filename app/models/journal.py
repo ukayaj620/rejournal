@@ -36,9 +36,11 @@ class Journal(db.Model):
     journal = Journal.query.filter_by(id=journal_id).first()
     journal.title = title
     journal.abstract = abstract
-    journal.journal_path = journal_path
     journal.user_id = user_id
     journal.topic_id = topic_id
+
+    if journal_path is not None:
+      journal.journal_path = journal_path
 
     db.session.commit()
 

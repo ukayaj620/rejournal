@@ -47,6 +47,18 @@ def journal_create():
   return render_template('pages/user/journal/add.html', role='User', topics=topics)
 
 
+@home.route('/journal/update/<id>', methods=['GET', 'POST'])
+@login_required
+@role_checker.check_permission(role='user')
+def journal_update(id):
+  if request.method == 'POST':
+    return journal_controller.update(request=request.form, doc=request.files['doc'])
+  
+  topics = topic_controller.fetch_all()
+  journal = journal_controller.fetch_by_id(journal_id=id)
+  return render_template('pages/user/journal/edit.html', role='User', topics=topics, journal=journal)
+
+
 @home.route('/journal/download/<filename>', methods=['GET'])
 @login_required
 @role_checker.check_permission(role='user')
