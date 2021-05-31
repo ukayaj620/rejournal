@@ -79,12 +79,12 @@
 
 {% block js %}
 <script>
-  const readImage = (input) => {
+  function readImage(input) {
     if (input.files && input.files[0]) {
-      const reader = new FileReader();
+      var reader = new FileReader();
 
-      reader.onload = (e) => {
-        const width = $('#profile').attr('src', e.target.result).width()
+      reader.onload = function(e) {
+        var width = $('#profile').attr('src', e.target.result).width()
         $('#profile')
           .attr('src', e.target.result)
           .height(width);

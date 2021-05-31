@@ -75,15 +75,15 @@
 
 {% block js %}
 <script>
-  $(document).ready(() => {
-    const wrapper = $("#inputAuthors");
-    const addRowButton = $("#addNewAuthorRow");
+  $(document).ready(function() {
+    var wrapper = $("#inputAuthors");
+    var addRowButton = $("#addNewAuthorRow");
     
-    const current = () => $(wrapper).children().length;
+    var current = $(wrapper).children().length;
 
-    $(addRowButton).click((e) => {
+    $(addRowButton).click(function(e) {
 
-      const next = current() + 1;
+      var next = current + 1;
 
       e.preventDefault()
       $(wrapper).append(
@@ -112,7 +112,7 @@
       );
     });
 
-    $(wrapper).on("click", ".removeNewAuthorRow", (e) => {
+    $(wrapper).on("click", ".removeNewAuthorRow", function(e) {
       e.preventDefault();
       $(wrapper).children("#inputAuthorRow-" + e.target.id).remove()
     });
