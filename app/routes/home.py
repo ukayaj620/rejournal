@@ -59,6 +59,14 @@ def journal_update(id):
   return render_template('pages/user/journal/edit.html', role='User', topics=topics, journal=journal)
 
 
+@home.route('/journal/delete', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='user')
+def journal_delete():
+  journal_controller.delete(request=request.form)
+  return redirect(url_for('home.journal_view'))
+
+
 @home.route('/journal/download/<filename>', methods=['GET'])
 @login_required
 @role_checker.check_permission(role='user')

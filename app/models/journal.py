@@ -10,8 +10,8 @@ class Journal(db.Model):
   upload_time = db.Column(db.DateTime, nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), unique=False, nullable=False)
   topic_id = db.Column(db.Integer, db.ForeignKey('topic.id', ondelete='SET NULL'), unique=False, nullable=True)
-  author = db.relationship('Author', backref='journal', lazy=True)
-  journal_log = db.relationship('JournalLog', uselist=False, backref='journal', lazy=True)
+  author = db.relationship('Author', backref='journal', lazy=True, cascade='delete,delete-orphan')
+  journal_log = db.relationship('JournalLog', uselist=False, backref='journal', lazy=True, cascade='delete,delete-orphan')
 
   def __repr__(self):
     return '<Journal %r>' % self.name
@@ -38,6 +38,7 @@ class Journal(db.Model):
     journal.abstract = abstract
     journal.user_id = user_id
     journal.topic_id = topic_id
+    journal.upload_time = datetime.now()
 
     if journal_path is not None:
       journal.journal_path = journal_path

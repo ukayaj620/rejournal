@@ -124,6 +124,11 @@ class JournalController:
 
     return redirect(url_for('home.journal_view_detail', id=journal.id))
 
+  def delete(self, request):
+    journal = self.fetch_by_id(journal_id=request['id'])
+    delete_doc(journal.journal_path)
+    self.journal.delete(journal_id=request['id'])
+
   def download(self, filename):
     directory = os.path.join('static/docs/uploads', filename)
     print(directory)
