@@ -1,0 +1,90 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Journal {% endblock %}
+
+{% block content %}
+<div class="ps-sm-3 pb-5">
+  <h3 class="fw-bold my-3">My Journals</h3>
+  <div class="col-12 col-md-11 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
+    <div class="col-12 col-md-7">
+      <input id="searchManuscript" class="form-control" type="text" placeholder="Search Manuscript...">
+    </div>
+    <div class="col-12 col-md-4">
+      <select id="filterManuscriptByTopic" class="form-select">
+        {% for topic in topics %}
+        <option value="{{ topic.id }}">{{ topic.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div id="myManuscripts" class="col-12 col-md-11">
+    {% for manuscript in manuscripts %}
+    <div style="border-radius: 16px;" class="border border-1 px-3 py-2 my-3">
+      <p id="title" class="fs-4 fw-bold mb-1">{{ manuscript.title }}</p>
+      <div class="d-flex align-items-center flex-row flex-wrap">
+        <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Author: </p>
+        {% for author in manuscript.author %}
+        <p style="font-size: medium;" class="fw-semibold me-2 mb-0">
+          [{{ loop.index0 + 1 }}]
+          <span><a href="mailto:{{ author.email }}" class="mb-0 text-decoration-none">{{ author.name }}</a></span>
+        </p>
+        {% endfor %}
+      </div>
+      <p id="topic" style="font-size: medium;" class="fw-semibold me-2 mb-0">Topic: <span>{{ manuscript.topic.name }}</span></p>
+      <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Last updated: <span class="text-secondary">{{ manuscript.journal_log.timestamp }}</span></p>
+      <div class="d-flex align-items-center mt-2">
+        <a href="#" target="_blank" type="button" class="btn btn-sm fw-semibold me-2 ms-auto text-primary"><i class="bi bi-download"></i> Download File</a>
+        <a href="#" type="button" class="btn btn-primary btn-sm fw-semibold"><i class="bi bi-file-earmark"></i> View Detail</a>
+      </div>
+    </div>
+
+    <!-- Delete Journal Modal -->
+    <div id="deleteJournal{{ manuscript.id }}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title fw-bold">Delete Journal</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="POST">
+              <input type="hidden" class="form-control" id="input-id" name="id" value="{{ manuscript.id }}" required>
+              <div>
+                <label class="form-label fw-semibold">Are you sure to delete this journal with title "{{ manuscript.title }}"?</label>
+              </div>
+              <div class="mb-2 mt-4 w-100">
+                <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $("#searchManuscript").on("keyup", function() {
+      var search = $(this).val().toLowerCase();
+      $("#myManuscripts div").filter(function() {
+        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1)
+      });
+    });
+
+    $("#filterManuscriptByTopic").on("change", function() {
+      var filter = $(this).children("option:selected").text().toLowerCase();
+      $("#myManuscripts div").filter(function() {
+        console.log($(this).find("#topic span").text().toLowerCase());
+        $(this).toggle($(this).find("#topic span").text().toLowerCase() === filter);
+      });
+    });
+  });
+</script>
+{% endblock  %}

@@ -10,7 +10,7 @@
       <input id="searchJournal" class="form-control" type="text" placeholder="Search Your Journal...">
     </div>
     <div class="col-12 col-md-4">
-      <select id="filterJournal" class="form-select">
+      <select id="filterJournalByStatus" class="form-select">
         {% for status in statuses %}
         <option value="{{ status.id }}">{{ status.name }}</option>
         {% endfor %}
@@ -80,9 +80,8 @@
       });
     });
 
-    $("#filterJournal").on("change", function() {
+    $("#filterJournalByStatus").on("change", function() {
       var filter = $(this).children("option:selected").text().toLowerCase();
-      console.log(filter);
       $("#myJournals div").filter(function() {
         console.log($(this).find("#status span").text().toLowerCase());
         $(this).toggle($(this).find("#status span").text().toLowerCase() === filter);

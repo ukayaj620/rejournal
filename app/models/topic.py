@@ -3,7 +3,7 @@ from app import db
 class Topic(db.Model):
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   name = db.Column(db.String(255), unique=False, nullable=False)
-  journal = db.relationship('Journal', backref='topic', lazy=True)
+  journal = db.relationship('Journal', back_populates='topic', lazy=True)
   reviewer = db.relationship('Reviewer', back_populates='topic', lazy=True)
 
   def __repr__(self):

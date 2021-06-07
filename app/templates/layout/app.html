@@ -21,7 +21,7 @@
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
-                ('Newly Submmitted Manuscripts', ''),
+                ('Newly Submmitted Manuscripts', url_for('reviewer.manuscript_submission')),
                 ('In Review Manuscripts', '')
               ]),
             ]-%}

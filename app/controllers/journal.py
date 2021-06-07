@@ -23,6 +23,10 @@ class JournalController:
   def fetch_all(self):
     return self.journal.query.filter_by(user_id=current_user.id).all()
 
+  def fetch_by_status(self, status):
+    status_id = self.status.query.filter_by(name=status).first().id
+    return self.journal.query.join(JournalLog).filter_by(status_id=status_id).all()
+
   def fetch_statuses(self):
     return self.status.query.all()
 
