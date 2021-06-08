@@ -96,6 +96,11 @@ class JournalController:
       topic_id=request['topic'],
     )
 
+    self.journal_log.update(
+      journal_id=journal.id,
+      status_id=self.status.query.filter_by(name='Submitted').first().id
+    )
+
     old_author_ids = [author.id for author in journal.author]
 
     updated_author_ids = [int(id) for id in request.getlist('ids[]')]
@@ -144,13 +149,6 @@ class JournalController:
 
   def review(self, request):
     journal = self.journal.query.filter_by(id=request['id']).first()
-    journal_log = self.journal_log.query.filter_by(
-      journal_id=request['id'], 
-      status_id=self.status.query.filter_by(name='Submitted').first().id
-    ).first()
-    
-    if journal_log.reviewer_id is not None:
-      flash('Manuscript has been reviewed by other reviewer!', category='warning')
 
     reviewer = self.reviewer.query.filter_by(user_id=current_user.id).first()
     self.journal_log.update(

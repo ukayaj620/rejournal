@@ -15,6 +15,7 @@
     </div>
   </nav>
   <h3 class="fw-bold mt-4">{{ journal.title }}</h3>
+  <h5 class="fw-semibold me-2 mb-0">Status: <span class="{{ journal.journal_log.status.color }}">{{ journal.journal_log.status.name }}</span></span></p>
   <div class="d-flex flex-column mt-3 col-12 col-md-11">
     <h5 class="fw-semibold">Abstract: </h5>
     <h6 class="me-2 mb-0" style="text-align: justify;">
