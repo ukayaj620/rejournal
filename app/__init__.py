@@ -48,7 +48,14 @@ def create_app():
         role_id=role.query.filter_by(name='admin').first().id
       )
       print('Admin has been seeded')
-      return 
+      return
+
+    if args == 'topic':
+      topic = Topic()
+      topic.create(name='Computational Mathematics')
+      topic.create(name='Artificial Intelligence')
+      print('Topic has been seeded')
+      return
 
   app.config.from_object(Config)
 
