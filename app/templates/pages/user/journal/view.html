@@ -11,6 +11,7 @@
     </div>
     <div class="col-12 col-md-4">
       <select id="filterJournalByStatus" class="form-select">
+        <option selected>All</option>
         {% for status in statuses %}
         <option value="{{ status.id }}">{{ status.name }}</option>
         {% endfor %}
@@ -19,7 +20,7 @@
   </div>
   <div id="myJournals" class="col-12 col-md-11">
     {% for journal in journals %}
-    <div style="border-radius: 16px;" class="border border-1 px-3 py-2 my-3">
+    <div style="border-radius: 16px;" class="journal border border-1 px-3 py-2 my-3">
       <p id="title" class="fs-4 fw-bold mb-1">{{ journal.title }}</p>
       <div class="d-flex align-items-center flex-row flex-wrap">
         <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Author: </p>
@@ -50,7 +51,7 @@
           </div>
           <div class="modal-body">
             <form action="{{ url_for('home.journal_delete') }}" method="POST">
-              <input type="hidden" class="form-control" id="input-id" name="id" value="{{ journal.id }}" required>
+              <input type="hidden" class="form-control" name="id" value="{{ journal.id }}" required>
               <div>
                 <label class="form-label fw-semibold">Are you sure to delete this journal with title "{{ journal.title }}"?</label>
               </div>
@@ -75,16 +76,20 @@
   $(document).ready(function() {
     $("#searchJournal").on("keyup", function() {
       var search = $(this).val().toLowerCase();
-      $("#myJournals div").filter(function() {
-        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1)
+      $("#myJournals div.journal").filter(function() {
+        $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1);
+        return;
       });
     });
 
     $("#filterJournalByStatus").on("change", function() {
       var filter = $(this).children("option:selected").text().toLowerCase();
-      $("#myJournals div").filter(function() {
-        console.log($(this).find("#status span").text().toLowerCase());
-        $(this).toggle($(this).find("#status span").text().toLowerCase() === filter);
+      $("#myJournals div.journal").filter(function() {
+        if(filter === 'all') {
+          $(this).toggle(true);
+        } else {
+          $(this).toggle($(this).find("#status span").text().toLowerCase() === filter);
+        }
       });
     });
   });
