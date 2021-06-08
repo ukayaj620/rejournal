@@ -34,13 +34,20 @@ def manuscript_download(filename):
   return journal_controller.download(filename)
 
 
-@reviewer.route('/manuscript/detail/<id>', methods=['GET'])
+@reviewer.route('/manuscript/detail/<id>', methods=['GET', 'POST'])
 @login_required
 @role_checker.check_permission(role='reviewer')
 def manuscript_view_detail(id):
   manuscript = journal_controller.fetch_by_id(journal_id=id)
   topics = topic_controller.fetch_all()
-  return render_template('pages/reviewer/manuscript/detail.html', role='Reviewer', topics=topics, manuscript=manuscript)
+  return render_template(
+    'pages/reviewer/manuscript/detail.html', 
+    role='Reviewer', 
+    topics=topics, 
+    manuscript=manuscript,
+    back_endpoint=request.form['path'],
+    back_text=request.form['breadcrumb']
+  )
 
 
 @reviewer.route('/manuscript/review/list', methods=['GET'])

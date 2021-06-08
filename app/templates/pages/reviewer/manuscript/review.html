@@ -27,7 +27,11 @@
       <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Last updated: <span class="text-secondary">{{ manuscript.journal_log.timestamp }}</span></p>
       <div class="d-flex align-items-center mt-2">
         <a href="{{ url_for('reviewer.manuscript_download', filename=manuscript.journal_path) }}" target="_blank" type="button" class="btn btn-sm fw-semibold me-2 ms-auto text-primary"><i class="bi bi-download"></i> Download File</a>
-        <a href="{{ url_for('reviewer.manuscript_view_detail', id=manuscript.id) }}" type="button" class="btn btn-primary btn-sm fw-semibold"><i class="bi bi-file-earmark"></i> View Detail</a>
+        <form action="{{ url_for('reviewer.manuscript_view_detail', id=manuscript.id) }}" method="POST">
+          <input type="hidden" name="path" value="{{ request.endpoint }}">
+          <input type="hidden" name="breadcrumb" value="In Review Manuscripts">
+          <button type="submit" class="btn btn-primary btn-sm fw-semibold"><i class="bi bi-file-earmark"></i> View Detail</button>
+        </form>
       </div>
     </div>
     {% endfor %}
