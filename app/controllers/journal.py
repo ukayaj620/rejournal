@@ -5,6 +5,7 @@ from app.models.journal import Journal
 from app.models.journal_log import JournalLog
 from app.models.author import Author
 from app.models.status import Status
+from app.models.reviewer import Reviewer
 from app.utils.file import save_doc, delete_doc
 from app.config import Config
 
@@ -16,12 +17,21 @@ class JournalController:
     self.author = Author()
     self.status = Status()
     self.journal_log = JournalLog()
+    self.reviewer = Reviewer()
 
   def fetch_by_id(self, journal_id):
     return self.journal.query.filter_by(id=journal_id).first()
 
   def fetch_all(self):
     return self.journal.query.filter_by(user_id=current_user.id).all()
+
+  def fetch_by_reviewer(self):
+    status_id = self.status.query.filter_by(name='In Review').first().id
+    reviewer = self.reviewer.query.filter_by(user_id=current_user.id).first()
+    return self.journal.query.join(JournalLog).filter_by(
+      status_id=status_id,
+      reviewer_id=reviewer.id
+    ).all()
 
   def fetch_by_status(self, status):
     status_id = self.status.query.filter_by(name=status).first().id
@@ -98,16 +108,6 @@ class JournalController:
     ids_to_update = list(set(updated_author_ids) & set(old_author_ids))
     ids_to_delete = list(set(old_author_ids) - set(updated_author_ids))
 
-    print('current_author_ids')
-    print(old_author_ids)
-    print('updated_author_ids')
-    print(updated_author_ids)
-
-    print('update')
-    print(ids_to_update)
-    print('delete')
-    print(ids_to_delete)
-
     for index in range(0, n_old_author):
       if updated_author_ids[index] in ids_to_update:
         self.author.update(
@@ -140,3 +140,20 @@ class JournalController:
     directory = os.path.join('static/docs/uploads', filename)
     print(directory)
     return send_file(directory, as_attachment=True)
+
+  def review(self, request):
+    journal_log = self.journal_log.query.filter_by(
+      journal_id=request['id'], 
+      status_id=self.status.query.filter_by(name='Submitted').first().id
+    ).first()
+    
+    if journal_log.reviewer_id is not None:
+      flash('Manuscript has been reviewed by other reviewer!', category='warning')
+
+    reviewer = self.reviewer.query.filter_by(user_id=current_user.id).first()
+    self.journal_log.update(
+      journal_id=request['id'],
+      status_id=self.status.query.filter_by(name='In Review').first().id,
+      reviewer_id=reviewer.id
+    )
+

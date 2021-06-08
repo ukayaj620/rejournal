@@ -22,7 +22,7 @@
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
                 ('New Manuscript Submissions', url_for('reviewer.manuscript_submission')),
-                ('In Review Manuscripts', '')
+                ('In Review Manuscripts', url_for('reviewer.manuscript_review_list'))
               ]),
             ]-%}
           {% elif role == 'Admin' %}

@@ -23,9 +23,12 @@ class JournalLog(db.Model):
     db.session.add(journal_log)
     db.session.commit()
 
-  def update(self, journal_id, status_id):
-    journal_log = JournalLog.query.filter_by(journal_id=journal_id)
+  def update(self, journal_id, status_id, reviewer_id=None):
+    journal_log = JournalLog.query.filter_by(journal_id=journal_id).first()
     journal_log.status_id = status_id
     journal_log.timestamp = datetime.now()
+
+    if reviewer_id is not None:
+      journal_log.reviewer_id = reviewer_id
 
     db.session.commit()

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from app.controllers.auth import AuthController
 from app.controllers.journal import JournalController
@@ -42,3 +42,19 @@ def manuscript_view_detail(id):
   topics = topic_controller.fetch_all()
   return render_template('pages/reviewer/manuscript/detail.html', role='Reviewer', topics=topics, manuscript=manuscript)
 
+
+@reviewer.route('/manuscript/review/list', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_review_list():
+  manuscripts = journal_controller.fetch_by_reviewer()
+  topics = topic_controller.fetch_all()
+  return render_template('pages/reviewer/manuscript/review.html', role='Reviewer', topics=topics, manuscripts=manuscripts)
+
+
+@reviewer.route('/manuscript/review', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_review():
+  journal_controller.review(request=request.form)
+  return redirect(url_for('reviewer.manuscript_review_list'))
