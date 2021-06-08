@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 from app.middlewares.role_checker import RoleChecker
 from app.controllers.topic import TopicController
+from app.controllers.journal import JournalController
 from app.controllers.user import UserController
 
 admin = Blueprint('admin', __name__, template_folder='templates')
@@ -9,13 +10,15 @@ role_checker = RoleChecker()
 
 topic_controller = TopicController()
 user_controller = UserController()
+journal_controller = JournalController()
 
 @admin.route('/', methods=['GET'])
 @login_required
 @role_checker.check_permission(role='admin')
 def index():
   metrics = {
-    'topic': topic_controller.topic.query.count()
+    'topic': len(topic_controller.topic.query.all()),
+    'manuscript': len(journal_controller.fetch_by_status(status='Submitted'))
   }
   return render_template('pages/admin/index.html', metrics=metrics, role='Admin')
 
