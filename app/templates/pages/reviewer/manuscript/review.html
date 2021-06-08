@@ -9,14 +9,6 @@
     <div class="col-12 col-md-7">
       <input id="searchManuscript" class="form-control" type="text" placeholder="Search Manuscript...">
     </div>
-    <!-- <div class="col-12 col-md-4">
-      <select id="filterManuscriptByTopic" class="form-select">
-        <option selected>All</option>
-        {% for topic in topics %}
-        <option value="{{ topic.id }}">{{ topic.name }}</option>
-        {% endfor %}
-      </select>
-    </div> -->
   </div>
   <div id="myManuscripts" class="col-12 col-md-11">
     {% for manuscript in manuscripts %}
@@ -52,17 +44,6 @@
         $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1)
       });
     });
-
-    // $("#filterManuscriptByTopic").on("change", function() {
-    //   var filter = $(this).children("option:selected").text().toLowerCase();
-    //   $("#myManuscripts div.manuscript").filter(function() {
-    //     if(filter === 'all') {
-    //       $(this).toggle(true);
-    //     } else {
-    //       $(this).toggle($(this).find("#topic span").text().toLowerCase() === filter);
-    //     }
-    //   });
-    // });
   });
 </script>
 {% endblock  %}
