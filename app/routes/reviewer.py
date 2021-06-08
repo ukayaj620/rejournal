@@ -17,6 +17,7 @@ topic_controller = TopicController()
 def index():
   return render_template('pages/index.html', role='Reviewer')
 
+
 @reviewer.route('/manuscript/submission', methods=['GET'])
 @login_required
 @role_checker.check_permission(role='reviewer')
@@ -25,4 +26,19 @@ def manuscript_submission():
   topics = topic_controller.fetch_all()
   return render_template('pages/reviewer/manuscript/submission.html', role='Reviewer', manuscripts=manuscripts, topics=topics)
 
-  
+
+@reviewer.route('/manuscript/download/<filename>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_download(filename):
+  return journal_controller.download(filename)
+
+
+@reviewer.route('/manuscript/detail/<id>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_view_detail(id):
+  manuscript = journal_controller.fetch_by_id(journal_id=id)
+  topics = topic_controller.fetch_all()
+  return render_template('pages/reviewer/manuscript/detail.html', role='Reviewer', topics=topics, manuscript=manuscript)
+
