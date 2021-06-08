@@ -1,15 +1,15 @@
 from app import mail
 from flask_mail import Message
-import os
+from app.config import Config
 
-def send_email(sender, to, subject, html):
-  email = Message(subject, sender=sender, recipients=to)
+def send_email(to, subject, html):
+  email = Message(subject, sender=Config.MAIL_USERNAME, recipients=to)
   email.html = html
   mail.send(email)
 
 def send_signup_verification(to, link):
 
-  verify_link = str(os.environ.get('VERIFY_URL')) + link
+  verify_link = Config.VERIFY_URL + link
 
   message_body = f"""
     <div style="align-text: center;">
@@ -21,7 +21,6 @@ def send_signup_verification(to, link):
 
   send_email(
     subject='ReJournal Registration Verification',
-    sender=str(os.environ.get('MAIL_USERNAME')),
     to=[to],
     html=message_body
   )
@@ -37,7 +36,6 @@ def send_account_credential(to, password):
 
   send_email(
     subject='ReJournal Account Creation',
-    sender=str(os.environ.get('MAIL_USERNAME')),
     to=[to],
     html=message_body
   )
@@ -53,7 +51,19 @@ def send_review_notification(to, title):
 
   send_email(
     subject='Manuscript In Review',
-    sender=str(os.environ.get('MAIL_USERNAME')),
+    to=[to],
+    html=message_body
+  )
+
+def send_custom_mail(to, subject, content):
+  message_body = f"""
+    <div style="align-text: center;">
+      <p>{content}</p>
+    </div>
+  """
+
+  send_email(
+    subject=subject,
     to=[to],
     html=message_body
   )

@@ -24,6 +24,8 @@ class Config:
     MAIL_USE_TLS = bool(conv.strtobool(str(os.environ.get('MAIL_USE_TLS'))))
     MAIL_USE_SSL = bool(conv.strtobool(str(os.environ.get('MAIL_USE_SSL'))))
 
+    VERIFY_URL = str(os.environ.get('VERIFY_URL'))
+
 
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
