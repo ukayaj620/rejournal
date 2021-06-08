@@ -10,13 +10,19 @@
       <li class="breadcrumb-item fw-semibold active" aria-current="page">{{ manuscript.title }}</li>
     </ol>
 
-    {% if back_endpoint != 'reviewer.manuscript_submission' %}
     <div class="col-12 col-md-6 d-flex flex-row">
-      <button class="btn btn-success btn-sm fw-semibold ms-auto me-2" data-bs-toggle="modal" data-bs-target="#pusblishManuscript"><i class="bi bi-journal-check"></i> Published</button>
+      {% if back_endpoint == 'reviewer.manuscript_submission' %}
+      <button class="btn btn-success btn-sm fw-semibold ms-auto" data-bs-toggle="modal" data-bs-target="#reviewManuscript"><i class="bi bi-search"></i> Review</button>
+      {% endif %}
+      {% if back_endpoint != 'reviewer.manuscript_submission' and manuscript.journal_log.status.name == 'In Review' %}
+      <button class="btn btn-success btn-sm fw-semibold ms-auto me-2" data-bs-toggle="modal" data-bs-target="#publishManuscript"><i class="bi bi-journal-check"></i> Published</button>
       <button class="btn btn-primary btn-sm fw-semibold me-2" data-bs-toggle="modal" data-bs-target="#acceptManuscript"><i class="bi bi-check-lg"></i> Accepted</button>
       <button class="btn btn-danger btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#rejectManuscript"><i class="bi bi-x-lg"></i> Reject</button>
+      {% endif %}
+      {% if manuscript.journal_log.status.name == 'Accepted' %}
+      <button class="btn btn-success btn-sm fw-semibold ms-auto me-2" data-bs-toggle="modal" data-bs-target="#publishManuscript"><i class="bi bi-journal-check"></i> Published</button>
+      {% endif %}
     </div>
-    {% endif %}
   </nav>
   <h3 class="fw-bold mt-4">{{ manuscript.title }}</h3>
   <h5 class="fw-semibold me-2 mb-0">Status: <span class="{{ manuscript.journal_log.status.color }}">{{ manuscript.journal_log.status.name }}</span></span></p>
@@ -41,6 +47,30 @@
       </h6>
     </div>
     {% endfor %}
+  </div>
+
+   <!-- Review Manuscript Modal -->
+   <div id="reviewManuscript" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">Review Manuscript</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('reviewer.manuscript_review') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
+            <input type="hidden" name="id" value="{{ manuscript.id }}" required>
+            <div class="w-100">
+              <p class="form-label fw-semibold">Are you sure want to review manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Review Manuscript</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Reject Manuscript Modal -->

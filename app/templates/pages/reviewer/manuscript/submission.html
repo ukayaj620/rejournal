@@ -62,7 +62,7 @@
           <div class="modal-body">
             <form action="{{ url_for('reviewer.manuscript_review') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
               <input type="hidden" name="id" value="{{ manuscript.id }}" required>
-              <div>
+              <div class="w-100">
                 <p class="form-label fw-semibold">Are you sure want to review manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
               </div>
               <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Review Manuscript</button>
