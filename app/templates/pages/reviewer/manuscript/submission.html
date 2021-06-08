@@ -19,6 +19,12 @@
       </select>
     </div>
   </div>
+  {% if manuscripts|length == 0 %}
+  <div class="col-12 col-md-11 d-flex flex-column align-items-center justify-content-center">
+    <img class="col-9 col-md-4 mt-5" src="{{ url_for('static', filename='images/nothing.svg') }}">
+    <h4 class="fw-semibold mt-4">No New Manuscripts Submitted</h4>
+  </div>
+  {% endif %}
   <div id="myManuscripts" class="col-12 col-md-11">
     {% for manuscript in manuscripts %}
     <div style="border-radius: 16px;" class="manuscript border border-1 px-3 py-2 my-3">

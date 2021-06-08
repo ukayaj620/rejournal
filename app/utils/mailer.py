@@ -41,4 +41,19 @@ def send_account_credential(to, password):
     to=[to],
     html=message_body
   )
-  
+
+def send_review_notification(to, title):
+  message_body = f"""
+    <div style="align-text: center;">
+      <h4>Your manuscript with Title</h4>
+      <p><span style="font-weight: 700;">{title}</span> is being reviewed!</p>
+      <p>Later information will be told the following day.</p>
+    </div>
+  """
+
+  send_email(
+    subject='Manuscript In Review',
+    sender=str(os.environ.get('MAIL_USERNAME')),
+    to=[to],
+    html=message_body
+  )

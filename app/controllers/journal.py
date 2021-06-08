@@ -5,7 +5,9 @@ from app.models.journal import Journal
 from app.models.journal_log import JournalLog
 from app.models.author import Author
 from app.models.status import Status
+from app.models.user import User
 from app.models.reviewer import Reviewer
+from app.utils.mailer import send_review_notification
 from app.utils.file import save_doc, delete_doc
 from app.config import Config
 
@@ -18,6 +20,7 @@ class JournalController:
     self.status = Status()
     self.journal_log = JournalLog()
     self.reviewer = Reviewer()
+    self.user = User()
 
   def fetch_by_id(self, journal_id):
     return self.journal.query.filter_by(id=journal_id).first()
@@ -142,6 +145,7 @@ class JournalController:
     return send_file(directory, as_attachment=True)
 
   def review(self, request):
+    journal = self.journal.query.filter_by(id=request['id']).first()
     journal_log = self.journal_log.query.filter_by(
       journal_id=request['id'], 
       status_id=self.status.query.filter_by(name='Submitted').first().id
@@ -155,5 +159,10 @@ class JournalController:
       journal_id=request['id'],
       status_id=self.status.query.filter_by(name='In Review').first().id,
       reviewer_id=reviewer.id
+    )
+    
+    send_review_notification(
+      to=self.user.query.filter_by(id=journal.user_id).first().email,
+      title=journal.title
     )
 
