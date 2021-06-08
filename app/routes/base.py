@@ -2,17 +2,20 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from app.controllers.auth import AuthController
 from app.controllers.user import UserController
+from app.controllers.topic import TopicController
 
 
 base = Blueprint('base', __name__, template_folder='templates')
 auth_controller = AuthController()
 user_controller = UserController()
+topic_controller = TopicController()
 
 @base.route('/', methods=['GET'])
 def index():
+  topics = topic_controller.fetch_all()
   if current_user.is_authenticated:
     return auth_controller.determine_redirection(role_id=current_user.role_id)
-  return render_template('pages/about.html')
+  return render_template('pages/about.html', topics=topics)
 
 
 @base.route('/profile', methods=['GET'])

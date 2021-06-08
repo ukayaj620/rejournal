@@ -28,9 +28,9 @@
         Discover scientific knowledge and stay connected to the world of science.
       </p>
       <div class="d-flex col-12 flex-row flex-wrap justify-content-center justify-content-sm-start">
-        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Computer</a>
-        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Biology</a>
-        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">Physics</a>
+        {% for topic in topics[:5] %}
+        <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">{{ topic.name }}</a>
+        {% endfor %}
         <a class="btn btn-outline-dark border-2 mt-2 me-2 fs-6 fw-semibold rounded-pill" href="#">More...</a>
       </div>
     </div>
