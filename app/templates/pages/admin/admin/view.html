@@ -4,16 +4,7 @@
 
 {% block content %}
 <div class="ps-sm-3">
-  {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-    <div class="position-fixed top-0 end-0 pt-3 pe-3">
-      <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert" style="z-index: 5;">
-        {{ messages[0][1] }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    </div>
-    {% endif %}
-  {% endwith %}
+  {% include "layout/flash.html" %}
   <h3 class="fw-bold mt-3">Admins</h3>
   <button data-bs-toggle="modal" data-bs-target="#addAdminModal" class="btn btn-success fw-semibold mt-3"><i class="bi bi-plus-square-fill me-2"></i> Add Admin</button>
   <div class="col-11 mt-3">

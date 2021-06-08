@@ -3,7 +3,8 @@
 {% block title %} | Topic {% endblock %}
 
 {% block content %}
-<div class="col ms-3">
+<div class="ps-sm-3">
+  {% include "layout/flash.html" %}
   <h3 class="fw-bold mt-3">Topic</h3>
   <button class="btn btn-success fw-semibold mt-3" data-bs-toggle="modal" data-bs-target="#addTopicModal"><i class="bi bi-plus-square-fill me-2"></i> Add Topic</button>
   <div class="col-11 mt-3">
