@@ -9,8 +9,17 @@
       <li class="breadcrumb-item fw-semibold text-decoration-none"><a href="{{ url_for(back_endpoint) }}">{{ back_text }}</a></li>
       <li class="breadcrumb-item fw-semibold active" aria-current="page">{{ manuscript.title }}</li>
     </ol>
+
+    {% if back_endpoint != 'reviewer.manuscript_submission' %}
+    <div class="col-12 col-md-6 d-flex flex-row">
+      <button class="btn btn-success btn-sm fw-semibold ms-auto me-2" data-bs-toggle="modal" data-bs-target="#pusblishManuscript"><i class="bi bi-journal-check"></i> Published</button>
+      <button class="btn btn-primary btn-sm fw-semibold me-2" data-bs-toggle="modal" data-bs-target="#acceptManuscript"><i class="bi bi-check-lg"></i> Accepted</button>
+      <button class="btn btn-danger btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#rejectManuscript"><i class="bi bi-x-lg"></i> Reject</button>
+    </div>
+    {% endif %}
   </nav>
   <h3 class="fw-bold mt-4">{{ manuscript.title }}</h3>
+  <h5 class="fw-semibold me-2 mb-0">Status: <span class="{{ manuscript.journal_log.status.color }}">{{ manuscript.journal_log.status.name }}</span></span></p>
   <div class="d-flex flex-column mt-3 col-12 col-md-11">
     <h5 class="fw-semibold">Abstract: </h5>
     <h6 class="me-2 mb-0" style="text-align: justify;">
@@ -33,10 +42,43 @@
     </div>
     {% endfor %}
   </div>
+
+  <!-- Reject Manuscript Modal -->
+  <div id="rejectManuscript" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">Reject Manuscript</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('reviewer.manuscript_reject') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
+            <input type="hidden" class="form-control" id="input-id" name="id" value="{{ manuscript.id }}" required>
+            <div class="mb-2 w-100">
+              <p class="fs-6 form-label fw-semibold">Please specify your mail messages!</p>
+              <p class="fs-6 form-label fw-semibold">This message will be sent to the manuscript sender.</p>
+            </div>
+            <div class="mb-2 w-100">
+              <label for="input-subject" class="fs-6 form-label fw-semibold">Subject</label>
+              <input type="text" class="form-control" id="input-subject" name="subject" required>
+            </div>
+            <div class="mb-2 w-100">
+              <label for="input-messages" class="fs-6 form-label">Messages</label>
+              <textarea type="text" class="form-control" id="input-messages" name="messages" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger w-100 fw-bold mt-3 fw-bold">Send Rejection Message</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="col-12 col-md-11 d-flex flex-column align-items-center justify-content-center mt-3">
     <h5 class="fw-semibold align-self-start">PDF: </h5>
     <iframe class="col-12 py-2 px-md-0 vh-100" src="{{ url_for('static', filename='docs/uploads/' + manuscript.journal_path) }}#toolbar=0">
   </div>
-
 </div>
 {% endblock %}

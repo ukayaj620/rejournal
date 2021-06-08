@@ -55,8 +55,8 @@ def manuscript_view_detail(id):
 @role_checker.check_permission(role='reviewer')
 def manuscript_review_list():
   manuscripts = journal_controller.fetch_by_reviewer()
-  topics = topic_controller.fetch_all()
-  return render_template('pages/reviewer/manuscript/review.html', role='Reviewer', topics=topics, manuscripts=manuscripts)
+  statuses = [status for status in journal_controller.status.query.all() if status.name != 'Submitted']
+  return render_template('pages/reviewer/manuscript/review.html', role='Reviewer', statuses=statuses, manuscripts=manuscripts)
 
 
 @reviewer.route('/manuscript/review', methods=['POST'])
@@ -65,3 +65,12 @@ def manuscript_review_list():
 def manuscript_review():
   journal_controller.review(request=request.form)
   return redirect(url_for('reviewer.manuscript_review_list'))
+
+
+@reviewer.route('/manuscript/reject', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_reject():
+  journal_controller.reject(request=request.form)
+  return redirect(url_for('reviewer.manuscript_review_list'))
+

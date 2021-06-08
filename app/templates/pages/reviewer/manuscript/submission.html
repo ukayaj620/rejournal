@@ -47,10 +47,31 @@
           <input type="hidden" name="breadcrumb" value="New Submissions">
           <button type="submit" class="btn btn-primary btn-sm fw-semibold me-2"><i class="bi bi-file-earmark"></i> View Detail</button>
         </form>
-        <form action="{{ url_for('reviewer.manuscript_review') }}" method="POST">
-          <input type="hidden" name="id" value="{{ manuscript.id }}">
-          <button type="submit" class="btn btn-success btn-sm fw-semibold">Review</button>
-        </form>
+        <button class="btn btn-success btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#reviewManuscript{{ manuscript.id }}"><i class="bi bi-search"></i> Review</button>
+      </div>
+    </div>
+    
+    <!-- Review Manuscript Modal -->
+    <div id="reviewManuscript{{ manuscript.id }}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title fw-bold">Review Manuscript</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('reviewer.manuscript_review') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
+              <input type="hidden" name="id" value="{{ manuscript.id }}" required>
+              <div>
+                <p class="form-label fw-semibold">Are you sure want to review manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
+              </div>
+              <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Review Manuscript</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
     {% endfor %}

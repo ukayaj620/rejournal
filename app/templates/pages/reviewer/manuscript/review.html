@@ -4,10 +4,18 @@
 
 {% block content %}
 <div class="ps-sm-3 pb-5">
-  <h3 class="fw-bold my-3">In Review Manuscripts</h3>
+  <h3 class="fw-bold my-3">Handled Manuscripts</h3>
   <div class="col-12 col-md-11 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
     <div class="col-12 col-md-7">
       <input id="searchManuscript" class="form-control" type="text" placeholder="Search Manuscript...">
+    </div>
+    <div class="col-12 col-md-4">
+      <select id="filterManuscriptByStatus" class="form-select">
+        <option selected>All</option>
+        {% for status in statuses %}
+        <option value="{{ status.id }}">{{ status.name }}</option>
+        {% endfor %}
+      </select>
     </div>
   </div>
   <div id="myManuscripts" class="col-12 col-md-11">
@@ -23,13 +31,13 @@
         </p>
         {% endfor %}
       </div>
-      <p id="topic" style="font-size: medium;" class="fw-semibold me-2 mb-0">Topic: <span>{{ manuscript.topic.name }}</span></p>
+      <p id="topic" style="font-size: medium;" class="fw-semibold me-2 mb-0">Status: <span class="{{ manuscript.journal_log.status.color }}">{{ manuscript.journal_log.status.name }}</span></span></p>
       <p style="font-size: medium;" class="fw-semibold me-2 mb-0">Last updated: <span class="text-secondary">{{ manuscript.journal_log.timestamp }}</span></p>
       <div class="d-flex align-items-center mt-2">
         <a href="{{ url_for('reviewer.manuscript_download', filename=manuscript.journal_path) }}" target="_blank" type="button" class="btn btn-sm fw-semibold me-2 ms-auto text-primary"><i class="bi bi-download"></i> Download File</a>
         <form action="{{ url_for('reviewer.manuscript_view_detail', id=manuscript.id) }}" method="POST">
           <input type="hidden" name="path" value="{{ request.endpoint }}">
-          <input type="hidden" name="breadcrumb" value="In Review Manuscripts">
+          <input type="hidden" name="breadcrumb" value="Handled Manuscripts">
           <button type="submit" class="btn btn-primary btn-sm fw-semibold"><i class="bi bi-file-earmark"></i> View Detail</button>
         </form>
       </div>
@@ -46,6 +54,17 @@
       var search = $(this).val().toLowerCase();
       $("#myManuscripts div.manuscript").filter(function() {
         $(this).toggle($(this).find("#title").text().toLowerCase().indexOf(search) > -1)
+      });
+    });
+
+    $("#filterManuscriptByStatus").on("change", function() {
+      var filter = $(this).children("option:selected").text().toLowerCase();
+      $("#myManuscripts div.manuscript").filter(function() {
+        if(filter === 'all') {
+          $(this).toggle(true);
+        } else {
+          $(this).toggle($(this).find("#topic span").text().toLowerCase() === filter);
+        }
       });
     });
   });
