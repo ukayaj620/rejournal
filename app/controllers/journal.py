@@ -6,7 +6,7 @@ from app.models.journal_log import JournalLog
 from app.models.author import Author
 from app.models.status import Status
 from app.models.reviewer import Reviewer
-from app.utils.mailer import send_review_notification, send_custom_mail
+from app.utils.mailer import send_review_notification, send_custom_mail, send_acceptance_notification
 from app.utils.file import save_doc, delete_doc
 from app.config import Config
 
@@ -95,11 +95,14 @@ class JournalController:
       user_id=current_user.id,
       topic_id=request['topic'],
     )
+    
+    journal_log = self.journal_log.query.filter_by(journal_id=request['id']).first()
 
-    self.journal_log.update(
-      journal_id=journal.id,
-      status_id=self.status.query.filter_by(name='Submitted').first().id
-    )
+    if journal_log.status.name == 'Rejected':
+      self.journal_log.update(
+        journal_id=journal.id,
+        status_id=self.status.query.filter_by(name='Submitted').first().id
+      )
 
     old_author_ids = [author.id for author in journal.author]
 
@@ -148,7 +151,7 @@ class JournalController:
     return send_file(directory, as_attachment=True)
 
   def review(self, request):
-    journal = self.journal.query.filter_by(id=request['id']).first()
+    journal = self.fetch_by_id(journal_id=request['id'])
 
     reviewer = self.reviewer.query.filter_by(user_id=current_user.id).first()
     self.journal_log.update(
@@ -163,7 +166,7 @@ class JournalController:
     )
 
   def reject(self, request):
-    journal = self.journal.query.filter_by(id=request['id']).first()
+    journal = self.fetch_by_id(journal_id=request['id'])
     
     self.journal_log.update(
       journal_id=request['id'],
@@ -174,5 +177,18 @@ class JournalController:
       to=journal.user.email,
       subject=request['subject'],
       content=request['messages']
+    )
+
+  def accept(self, request):
+    journal = self.fetch_by_id(journal_id=request['id'])
+
+    self.journal_log.update(
+      journal_id=request['id'],
+      status_id=self.status.query.filter_by(name='Accepted').first().id
+    )
+
+    send_acceptance_notification(
+      to=journal.user.email,
+      title=journal.title
     )
 

@@ -55,6 +55,22 @@ def send_review_notification(to, title):
     html=message_body
   )
 
+def send_acceptance_notification(to, title):
+  message_body = f"""
+    <div style="align-text: center;">
+      <strong>Thank you for your submission.</strong>
+      <p>Your manuscript with title <span style="font-weight: 700;">{title}</span> has been accepted and will be pusblish this year.</p>
+      <p>We will soon improve to you after we publish your work.</p>
+    </div>
+  """
+
+  send_email(
+    subject='Manuscript Acceptance',
+    to=[to],
+    html=message_body
+  )
+
+
 def send_custom_mail(to, subject, content):
   message_body = f"""
     <div style="align-text: center;">

@@ -74,3 +74,11 @@ def manuscript_reject():
   journal_controller.reject(request=request.form)
   return redirect(url_for('reviewer.manuscript_review_list'))
 
+
+@reviewer.route('/manuscript/accept', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='reviewer')
+def manuscript_accept():
+  journal_controller.accept(request=request.form)
+  return redirect(url_for('reviewer.manuscript_review_list'))
+

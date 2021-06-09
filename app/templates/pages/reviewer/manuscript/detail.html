@@ -49,6 +49,30 @@
     {% endfor %}
   </div>
 
+  <!-- Accept Manuscript Modal -->
+  <div id="acceptManuscript" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">Accept Manuscript</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('reviewer.manuscript_accept') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
+            <input type="hidden" name="id" value="{{ manuscript.id }}" required>
+            <div class="w-100">
+              <p class="fs-6 form-label fw-semibold">Are you sure to accept the manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Accept Manuscript</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
    <!-- Review Manuscript Modal -->
    <div id="reviewManuscript" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -61,7 +85,7 @@
           <form action="{{ url_for('reviewer.manuscript_review') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
             <input type="hidden" name="id" value="{{ manuscript.id }}" required>
             <div class="w-100">
-              <p class="form-label fw-semibold">Are you sure want to review manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
+              <p class="fs-6 form-label fw-semibold">Are you sure want to review manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
             </div>
             <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Review Manuscript</button>
           </form>
