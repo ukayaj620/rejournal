@@ -55,7 +55,7 @@ def manuscript_view_detail(id):
 @role_checker.check_permission(role='reviewer')
 def manuscript_review_list():
   manuscripts = journal_controller.fetch_by_reviewer()
-  statuses = [status for status in journal_controller.status.query.all() if status.name != 'Submitted']
+  statuses = [status for status in journal_controller.status.query.all() if status.name != 'Submitted' and status.name != 'Published']
   return render_template('pages/reviewer/manuscript/review.html', role='Reviewer', statuses=statuses, manuscripts=manuscripts)
 
 
