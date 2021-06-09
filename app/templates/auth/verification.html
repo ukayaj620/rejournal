@@ -17,6 +17,6 @@
 
 <form class="col-md-3" action="{{ url_for('auth.resend_link') }}" method="POST">
   <input type="hidden" class="form-control" id="input-email" name="email" value="{{ data['user_email'] }}" required>
-  <button type="submit" class="btn btn-primary w-100 fw-bold">Resend Link</button>
+  <button type="submit" class="btn btn-dark w-100 fw-bold">Resend Link</button>
 </form>
 {% endblock %}
