@@ -15,7 +15,7 @@ def send_signup_verification(to, link):
     <div style="align-text: center;">
       <h4>Your Verification Link</h4>
       <p>Please click this link below to proceed</p>
-      <p>{verify_link}</p>
+      <a href="{verify_link}" target="_blank">{verify_link}</a>
     </div>
   """
 
