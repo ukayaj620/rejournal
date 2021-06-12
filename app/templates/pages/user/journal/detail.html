@@ -10,8 +10,10 @@
       <li class="breadcrumb-item fw-semibold active" aria-current="page">{{ journal.title }}</li>
     </ol>
     <div class="col-12 col-md-6 d-flex flex-row">
+      {% if journal.journal_log.status.name in ['Submitted', 'Rejected']  %}
       <a href="{{ url_for('home.journal_update', id=journal.id) }}" type="button" class="btn btn-warning btn-sm fw-semibold me-2 ms-auto"><i class="bi bi-pencil-square"></i> Edit</a>
       <button class="btn btn-danger btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#deleteJournal"><i class="bi bi-trash-fill"></i> Delete</button>
+      {% endif %}
     </div>
   </nav>
   <h3 class="fw-bold mt-4">{{ journal.title }}</h3>
