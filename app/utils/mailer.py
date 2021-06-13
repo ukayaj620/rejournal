@@ -74,7 +74,7 @@ def send_publication_notification(to, title, series):
   message_body = f"""
     <div style="align-text: center;">
       <strong>Hello, your manuscript has been published!</strong>
-      <p>Your manuscript with {title} is published as {series} series</p>
+      <p>Your manuscript with <span style="font-weight: 700;">{title}</span> is published as {series} series</p>
       <p>Thank you for trusting us to publish your amazing work. Glad to see your another sophisticated works!</p>
     </div>
   """
