@@ -16,14 +16,16 @@
                 ('New Journal', url_for('home.journal_create')),
                 ('View Journals', url_for('home.journal_view'))
               ]),
+              ('fs-5 bi bi-journal-check', 'Explore Publication', [url_for('base.view_publication')])
             ]-%}
           {% elif role == 'Reviewer' %}
             {% set sidebar=[
               ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
                 ('New Manuscript Submissions', url_for('reviewer.manuscript_submission')),
-                ('In Review Manuscripts', url_for('reviewer.manuscript_review_list'))
+                ('Handled Manuscripts', url_for('reviewer.manuscript_review_list'))
               ]),
+              ('fs-5 bi bi-journal-check', 'Explore Publication', [url_for('base.view_publication')])
             ]-%}
           {% elif role == 'Admin' %}
             {% set sidebar=[

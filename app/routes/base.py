@@ -1,14 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+from datetime import datetime
 from app.controllers.auth import AuthController
 from app.controllers.user import UserController
 from app.controllers.topic import TopicController
+from app.controllers.journal import JournalController
 
 
 base = Blueprint('base', __name__, template_folder='templates')
 auth_controller = AuthController()
 user_controller = UserController()
 topic_controller = TopicController()
+journal_controller = JournalController()
 
 @base.route('/', methods=['GET'])
 def index():
@@ -47,4 +50,24 @@ def update_profile_data():
 @login_required
 def update_profile_image():
   return user_controller.update_profile_image(photo=request.files['photo'], user_id=current_user.id)
+
+
+@base.route('/publication', methods=['GET'])
+@login_required
+def view_publication():
+  journals, publication_year = journal_controller.fetch_publication()
+  return render_template(
+    '/pages/publication/view.html', 
+    role=auth_controller.get_role_name(current_user.role_id).capitalize(), 
+    journals=journals, 
+    publication_year=publication_year,
+    years=list(set(publication_year))[::-1]
+  )
+
+
+@base.route('/publication/detail/<id>', methods=['GET'])
+@login_required
+def view_publication_detail(id):
+  journal = journal_controller.fetch_by_id(journal_id=id)
+  return render_template('/pages/publication/detail.html', role=auth_controller.get_role_name(current_user.role_id).capitalize(), journal=journal)
 

@@ -6,7 +6,7 @@ from app.models.journal_log import JournalLog
 from app.models.author import Author
 from app.models.status import Status
 from app.models.reviewer import Reviewer
-from app.utils.mailer import send_review_notification, send_custom_mail, send_acceptance_notification
+from app.utils.mailer import send_review_notification, send_custom_mail, send_acceptance_notification, send_publication_notification
 from app.utils.file import save_doc, delete_doc
 from app.config import Config
 
@@ -23,16 +23,23 @@ class JournalController:
   def fetch_by_id(self, journal_id):
     return self.journal.query.filter_by(id=journal_id).first()
 
-  def fetch_all(self):
+  def fetch_all(self, sort_by_time=False):
     return self.journal.query.filter_by(user_id=current_user.id).all()
 
+  def fetch_publication(self, year=None):
+    status_id = self.status.query.filter_by(name='Published').first().id
+    journals = self.journal.query.join(JournalLog).filter(
+      JournalLog.status_id == status_id
+    ).order_by(JournalLog.timestamp.desc()).all()
+    publication_year = [journal.journal_log.timestamp.year for journal in journals]
+    if year is not None:
+      return [journal for journal in journals if journal.journal_log.timestamp.year == year]
+    return (journals, publication_year)
+
   def fetch_by_reviewer(self):
-    status_id = self.status.query.filter_by(name='Submitted').first().id
     reviewer = self.reviewer.query.filter_by(user_id=current_user.id).first()
-    return self.journal.query.join(JournalLog).filter(
-      JournalLog.status_id != status_id,
-      JournalLog.reviewer_id == reviewer.id
-    ).all()
+    journals = self.journal.query.join(JournalLog).filter(JournalLog.reviewer_id == reviewer.id).all()
+    return [journal for journal in journals if journal.journal_log.status.name not in ['Submitted', 'Published']]
 
   def fetch_by_status(self, status):
     status_id = self.status.query.filter_by(name=status).first().id
@@ -190,5 +197,19 @@ class JournalController:
     send_acceptance_notification(
       to=journal.user.email,
       title=journal.title
+    )
+  
+  def publish(self, request):
+    journal = self.fetch_by_id(journal_id=request['id'])
+
+    self.journal_log.update(
+      journal_id=request['id'],
+      status_id=self.status.query.filter_by(name='Published').first().id
+    )
+
+    send_publication_notification(
+      to=journal.user.email,
+      title=journal.title,
+      series=journal.journal_log.timestamp.year
     )
 
