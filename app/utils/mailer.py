@@ -60,12 +60,27 @@ def send_acceptance_notification(to, title):
     <div style="align-text: center;">
       <strong>Thank you for your submission.</strong>
       <p>Your manuscript with title <span style="font-weight: 700;">{title}</span> has been accepted and will be pusblish this year.</p>
-      <p>We will soon improve to you after we publish your work.</p>
+      <p>We will soon inform to you after we publish your work.</p>
     </div>
   """
 
   send_email(
     subject='Manuscript Acceptance',
+    to=[to],
+    html=message_body
+  )
+
+def send_publication_notification(to, title, series):
+  message_body = f"""
+    <div style="align-text: center;">
+      <strong>Hello, your manuscript has been published!</strong>
+      <p>Your manuscript with {title} is published as {series} series</p>
+      <p>Thank you for trusting us to publish your amazing work. Glad to see your another sophisticated works!</p>
+    </div>
+  """
+
+  send_email(
+    subject='Manuscript Publication',
     to=[to],
     html=message_body
   )

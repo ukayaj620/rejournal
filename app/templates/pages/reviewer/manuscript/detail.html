@@ -1,6 +1,6 @@
 {% extends "layout/app.html" %}
 
-{% block title %} | {{ journal.title }} {% endblock %}
+{% block title %} | {{ manuscript.title }} {% endblock %}
 
 {% block content %}
 <div class="ps-sm-3 pb-5">
@@ -47,6 +47,30 @@
       </h6>
     </div>
     {% endfor %}
+  </div>
+
+  <!-- Accept Manuscript Modal -->
+  <div id="publishManuscript" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold">Publish Manuscript</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('reviewer.manuscript_publish') }}" class="d-flex flex-column justify-content-center align-items-center fw-semibold" method="POST">
+            <input type="hidden" name="id" value="{{ manuscript.id }}" required>
+            <div class="w-100">
+              <p class="fs-6 form-label fw-semibold">Are you sure to publish the manuscript with title: <br/><span class="fw-semibold fs-5">{{ manuscript.title }}</span></p>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold mt-3 fw-bold">Publish Manuscript</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Accept Manuscript Modal -->
