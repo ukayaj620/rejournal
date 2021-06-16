@@ -11,7 +11,6 @@
           <hr class="d-none d-md-block w-100 bg-dark border border-dark">
           {% if role == 'User' %}
             {% set sidebar=[
-              ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-journals', 'Journal', [
                 ('New Journal', url_for('home.journal_create')),
                 ('View Journals', url_for('home.journal_view'))
@@ -20,7 +19,6 @@
             ]-%}
           {% elif role == 'Reviewer' %}
             {% set sidebar=[
-              ('fs-5 bi-house', 'Home', ''),
               ('fs-5 bi-files', 'Manuscripts', [
                 ('New Manuscript Submissions', url_for('reviewer.manuscript_submission')),
                 ('Handled Manuscripts', url_for('reviewer.manuscript_review_list'))
