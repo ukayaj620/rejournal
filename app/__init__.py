@@ -78,6 +78,7 @@ def create_app():
   from app.models.author import Author
   from app.models.journal_log import JournalLog
   from app.models.reviewer import Reviewer
+  from app.models.applicant import Applicant
 
   @login_manager.user_loader
   def load_user(user_id):

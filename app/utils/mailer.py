@@ -7,6 +7,7 @@ def send_email(to, subject, html):
   email.html = html
   mail.send(email)
 
+
 def send_signup_verification(to, link):
 
   verify_link = Config.VERIFY_URL + link
@@ -25,6 +26,7 @@ def send_signup_verification(to, link):
     html=message_body
   )
 
+
 def send_account_credential(to, password):
   message_body = f"""
     <div style="align-text: center;">
@@ -39,6 +41,7 @@ def send_account_credential(to, password):
     to=[to],
     html=message_body
   )
+
 
 def send_review_notification(to, title):
   message_body = f"""
@@ -55,6 +58,7 @@ def send_review_notification(to, title):
     html=message_body
   )
 
+
 def send_acceptance_notification(to, title):
   message_body = f"""
     <div style="align-text: center;">
@@ -70,6 +74,7 @@ def send_acceptance_notification(to, title):
     html=message_body
   )
 
+
 def send_publication_notification(to, title, series):
   message_body = f"""
     <div style="align-text: center;">
@@ -81,6 +86,20 @@ def send_publication_notification(to, title, series):
 
   send_email(
     subject='Manuscript Publication',
+    to=[to],
+    html=message_body
+  )
+
+
+def send_application_notification(to, name):
+  message_body = f"""
+    <div style="align-text: center;">
+      <p style="font-weight: 700;">Hello, {name}</p>
+      <p>Thank you for your application. We will soon reach you out as soon as we can!</p>
+    </div>
+  """
+  send_email(
+    subject='Application Notification',
     to=[to],
     html=message_body
   )

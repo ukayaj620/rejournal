@@ -1,0 +1,46 @@
+{% extends "layout/base.html" %}
+
+{% block title %} | Application {% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center">
+  <div class="col-11 d-flex flex-row justify-content-center align-items-center pt-5 pt-sm-3">
+    <div class="d-none d-sm-block col-sm-4 me-sm-5 d-flex justify-content-center align-items-center">
+      <img class="col-10" src="{{ url_for('static', filename='images/resume.svg') }}" height="400px">
+    </div>
+    <div class="col-11 col-sm-5 ms-sm-5">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          <div class="w-100 alert alert-{{ messages[0][0] }}">
+            {{ messages[0][1] }}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form class="d-flex flex-column justify-content-center align-items-center fw-semibold" action="{{ url_for('base.application') }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-2 w-100">
+          <label for="input-name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="input-name" name="name" required>
+        </div>
+        <div class="mb-2 w-100">
+          <label for="input-email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="input-email" name="email" required>
+        </div>
+        <div class="mb-2 w-100">
+          <label for="input-telephone" class="form-label">Telephone</label>
+          <input type="text" class="form-control" id="input-telephone" name="telephone" required>
+        </div>
+        <div class="mb-2 w-100">
+          <label for="input-topic" class="form-label">Topic</label>
+          <input type="text" class="form-control" id="input-topic" name="topic" required>
+        </div>
+        <div class="mb-2 w-100">
+          <label for="input-cv" class="form-label">Upload your CV<span style="font-size:x-small;">    (*.pdf)</label>
+          <input type="file" class="form-control" id="input-cv" name="cv" required>
+        </div>
+        <button type="submit" class="btn btn-dark w-100 fw-bold mt-3 fw-bold border-2 border-dark">Apply as Reviewer</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

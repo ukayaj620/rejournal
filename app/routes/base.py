@@ -5,6 +5,7 @@ from app.controllers.auth import AuthController
 from app.controllers.user import UserController
 from app.controllers.topic import TopicController
 from app.controllers.journal import JournalController
+from app.controllers.applicant import ApplicantController
 
 
 base = Blueprint('base', __name__, template_folder='templates')
@@ -12,6 +13,7 @@ auth_controller = AuthController()
 user_controller = UserController()
 topic_controller = TopicController()
 journal_controller = JournalController()
+applicant_controller = ApplicantController()
 
 @base.route('/', methods=['GET'])
 def index():
@@ -19,6 +21,15 @@ def index():
   if current_user.is_authenticated:
     return auth_controller.determine_redirection(role_id=current_user.role_id)
   return render_template('pages/about.html', topics=topics)
+
+
+@base.route('/applicant', methods=['GET', 'POST'])
+def application():
+  topics = topic_controller.fetch_all()
+  if request.method == 'POST':
+    applicant_controller.apply(request=request.form, cv=request.files['cv'])
+    return redirect(url_for('base.application'))
+  return render_template('pages/applicant.html', topics=topics)
 
 
 @base.route('/profile', methods=['GET'])
