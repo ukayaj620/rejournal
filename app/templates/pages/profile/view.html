@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="ps-sm-3 d-flex flex-column align-items-center align-items-lg-start">
+  {% include "layout/flash.html" %}
   <div class="col-11 d-flex flex-row align-items-center justify-content-between mt-3">
     <h3 class="fw-bold">Profile</h3>
     <a class="btn btn-secondary fw-bold align-self-end" href="{{ url_for('base.update_profile_data') }}">Edit Profile</a>
