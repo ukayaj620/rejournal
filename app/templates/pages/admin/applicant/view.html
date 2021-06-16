@@ -1,0 +1,165 @@
+{% extends "layout/app.html" %}
+
+{% block title %} | Applicant {% endblock %}
+
+{% block content %}
+<div class="ps-sm-3">
+  {% include "layout/flash.html" %}
+  <h3 class="fw-bold mt-3">Admins</h3>
+  <div class="col-11 mt-3">
+    <table id="adminDataTable" class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-light fw-semibold">
+        {% for applicant in applicants %}
+          <tr class="align-middle">
+            <td scope="col">{{ 'CV{:>04}'.format(applicant.id) }}</td>
+            <td scope="col">{{ applicant.name }}</td>
+            <td scope="col">{{ applicant.email }}</td>
+            <td scope="col">
+              {% if applicant.is_viewed == True %}
+              <p class="fs-6 text-success mb-0">Approved</p>
+              {% else %}
+              <p class="fs-6 text-warning mb-0">Not Reviewed</p>
+              {% endif %}
+            </td>
+            <td scope="col">
+              <button class="btn btn-primary btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#viewApplicantModal{{ applicant.id }}"><i class="bi bi-person-square"></i> View</button>
+              {% if applicant.is_viewed == False %}
+              <button class="btn btn-success btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#receiveApplicantModal{{ applicant.id }}"><i class="bi bi-check-lg"></i> Receive</button>
+              <button class="btn btn-danger btn-sm fw-semibold me-1" data-bs-toggle="modal" data-bs-target="#rejectApplicantModal{{ applicant.id }}"><i class="bi bi-trash-fill"></i> Reject</button>
+              {% endif %}
+            </td>
+          </tr>
+
+          <!-- View Applicant Modal -->
+          <div id="viewApplicantModal{{ applicant.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">View Applicant</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column flex-md-row justify-content-center align-items-center">
+                  <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Name</label>
+                      <p class="fs-6 fw-bold text-dark">{{ applicant.name }}</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Email</label>
+                      <a class="text-decoration-none" href="mailto:{{ applicant.email }}">
+                        <p class="fs-6 fw-bold">{{ applicant.email }}</p>
+                      </a>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Telephone</label>
+                      <p class="fs-6 fw-bold text-dark">{{ applicant.telephone }}</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label class="form-label fw-semibold">Expertise</label>
+                      <p class="fs-6 fw-bold text-dark">{{ applicant.topic }}</p>
+                    </div>
+                    <a href="{{ url_for('admin.cv_download', filename=applicant.cv_path) }}" target="_blank" type="button" class="col-12 btn btn-primary fw-semibold"><i class="bi bi-download"></i> Download CV</a>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Receive Applicant Modal -->
+          <div id="receiveApplicantModal{{ applicant.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Receive Applicant</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('admin.receive_applicant') }}" method="POST">
+                    <input type="hidden" class="form-control" id="input-id" name="id" value="{{applicant.id}}" required>
+                    <div class="mb-2 w-100">
+                      <p class="fs-6 form-label fw-semibold">Please specify your approval messages!</p>
+                      <p class="fs-6 form-label fw-semibold">This message will be sent to applicant name <span class="text-primary">{{ applicant.name }}</span>.</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-subject" class="fs-6 form-label fw-semibold">Subject</label>
+                      <input type="text" class="form-control" id="input-subject" name="subject" required>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-messages" class="fs-6 form-label fw-semibold">Messages</label>
+                      <textarea type="text" class="form-control" id="input-messages" name="messages" required></textarea>
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-primary w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+          <!-- Reject Applicant Modal -->
+          <div id="rejectApplicantModal{{ applicant.id }}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title fw-bold">Reject Applicant</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('admin.reject_applicant') }}" method="POST">
+                    <input type="hidden" class="form-control" id="input-id" name="id" value="{{applicant.id}}" required>
+                    <div class="mb-2 w-100">
+                      <p class="fs-6 form-label fw-semibold">Please specify your rejection messages!</p>
+                      <p class="fs-6 form-label fw-semibold">This message will be sent to applicant name <span class="text-primary">{{ applicant.name }}</span>.</p>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-subject" class="fs-6 form-label fw-semibold">Subject</label>
+                      <input type="text" class="form-control" id="input-subject" name="subject" required>
+                    </div>
+                    <div class="mb-2 w-100">
+                      <label for="input-messages" class="fs-6 form-label fw-semibold">Messages</label>
+                      <textarea type="text" class="form-control" id="input-messages" name="messages" required></textarea>
+                    </div>
+                    <div class="mb-2 mt-4 w-100">
+                      <button class="btn btn-danger w-100 fw-bold" type="submit">Confirm</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+  $('#adminDataTable').DataTable({
+    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  });
+});
+</script>
+{% endblock %}

@@ -10,21 +10,21 @@
       <div class="card text-white bg-primary mb-3 d-flex me-3 flex-grow-1 card-width">
         <div class="card-header fs-4 fw-bold"><i class="fs-4 bi-file-earmark-person-fill"></i> Applicants</div>
         <div class="card-body py-0 d-flex flex-row align-items-end">
-          <p class="mb-0 fw-semibold" style="font-size: 64px;">10</p>
+          <p class="mb-0 fw-semibold" style="font-size: 64px;">{{ metrics['applicant'] }}</p>
           <p class="fs-6 fw-bold pb-2 ms-2">applicants</p>
         </div>
       </div>
       <div class="card text-white bg-success mb-3 d-flex me-3 flex-grow-1 card-width">
         <div class="card-header fs-4 fw-bold"><i class="fs-4 fs-5 bi-files"></i> Manuscripts</div>
         <div class="card-body py-0 d-flex flex-row align-items-end">
-          <p class="mb-0 fw-semibold" style="font-size: 64px;">10</p>
+          <p class="mb-0 fw-semibold" style="font-size: 64px;">{{ metrics['manuscript'] }}</p>
           <p class="fs-6 fw-bold pb-2 ms-2">manuscripts</p>
         </div>
       </div>
       <div class="card text-white bg-danger mb-3 d-flex me-3 flex-grow-1 card-width">
         <div class="card-header fs-4 fw-bold"><i class="fs-4 fs-5 bi-journals"></i> Published</div>
         <div class="card-body py-0 d-flex flex-row align-items-end">
-          <p class="mb-0 fw-semibold" style="font-size: 64px;">{{ metrics['manuscript'] }}</p>
+          <p class="mb-0 fw-semibold" style="font-size: 64px;">{{ metrics['published'] }}</p>
           <p class="fs-6 fw-bold pb-2 ms-2">journals</p>
         </div>
       </div>

@@ -154,7 +154,6 @@ class JournalController:
 
   def download(self, filename):
     directory = os.path.join('static/docs/uploads', filename)
-    print(directory)
     return send_file(directory, as_attachment=True)
 
   def review(self, request):

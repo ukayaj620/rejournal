@@ -4,6 +4,8 @@ from app.middlewares.role_checker import RoleChecker
 from app.controllers.topic import TopicController
 from app.controllers.journal import JournalController
 from app.controllers.user import UserController
+from app.controllers.applicant import ApplicantController
+
 
 admin = Blueprint('admin', __name__, template_folder='templates')
 role_checker = RoleChecker()
@@ -11,6 +13,7 @@ role_checker = RoleChecker()
 topic_controller = TopicController()
 user_controller = UserController()
 journal_controller = JournalController()
+applicant_controller = ApplicantController()
 
 @admin.route('/', methods=['GET'])
 @login_required
@@ -18,7 +21,9 @@ journal_controller = JournalController()
 def index():
   metrics = {
     'topic': len(topic_controller.topic.query.all()),
-    'manuscript': len(journal_controller.fetch_by_status(status='Submitted'))
+    'manuscript': len(journal_controller.fetch_by_status(status='Submitted')),
+    'published': len(journal_controller.fetch_by_status(status='Published')),
+    'applicant': len(applicant_controller.fetch_all())
   }
   return render_template('pages/admin/index.html', metrics=metrics, role='Admin')
 
@@ -117,3 +122,34 @@ def update_reviewer(id):
 def delete_reviewer(id):
   user_controller.delete(user_id=id)
   return redirect(url_for('admin.view_reviewer'))
+
+
+@admin.route('/applicant/', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='admin')
+def view_applicant():
+  applicants = applicant_controller.fetch_all()
+  return render_template('pages/admin/applicant/view.html', role='Admin', applicants=applicants)
+
+
+@admin.route('/applicant/download/<filename>', methods=['GET'])
+@login_required
+@role_checker.check_permission(role='admin')
+def cv_download(filename):
+  return applicant_controller.cv_download(filename)
+
+
+@admin.route('/applicant/receive', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def receive_applicant():
+  applicant_controller.receive(request=request.form)
+  return redirect(url_for('admin.view_applicant'))
+
+
+@admin.route('/applicant/reject', methods=['POST'])
+@login_required
+@role_checker.check_permission(role='admin')
+def reject_applicant():
+  applicant_controller.reject(request=request.form)
+  return redirect(url_for('admin.view_applicant'))
