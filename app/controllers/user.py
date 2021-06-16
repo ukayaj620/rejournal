@@ -77,6 +77,11 @@ class UserController:
     user = self.get_profile(user_id=user_id)
 
     filename = save_image(photo)
+    
+    if filename is False:
+      flash('Wrong file type. Allowed file type is .jpg .png .jpeg', 'warning')
+      return redirect(url_for('base.profile'))
+
     delete_image(user.picture_path) if user.picture_path is not None else None
 
     self.user.update_image(

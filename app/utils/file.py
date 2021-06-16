@@ -27,7 +27,7 @@ def save_image(photo):
     photo_filename = generate_filename(file_ext)
     if file_ext not in Config.UPLOAD_IMAGE_EXTENSIONS or \
         file_ext != validate_image(photo.stream):
-      abort(400)
+      return False
 
     if not os.path.exists(Config.UPLOAD_IMAGE_PATH):
       os.mkdir(os.path.join(Config.UPLOAD_IMAGE_DIR, 'uploads'))
