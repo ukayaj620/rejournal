@@ -52,7 +52,7 @@ class JournalController:
     doc_path = save_doc(doc)
 
     if doc_path is False:
-      flash('Wrong file type. Allowed file type is .pdf, .doc, and .docx', 'warning')
+      flash('Wrong file type. Allowed file type is .pdf', 'warning')
       return redirect(url_for('home.journal_create'))
 
     journal = self.journal.create(

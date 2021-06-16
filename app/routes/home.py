@@ -15,7 +15,7 @@ journal_controller = JournalController()
 @login_required
 @role_checker.check_permission(role='user')
 def index():
-  return render_template('pages/user/index.html', role='User')
+  return redirect(url_for('base.view_publication'))
 
 
 @home.route('/journal/', methods=['GET'])

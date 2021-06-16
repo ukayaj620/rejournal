@@ -15,7 +15,7 @@ topic_controller = TopicController()
 @login_required
 @role_checker.check_permission(role='reviewer')
 def index():
-  return render_template('pages/index.html', role='Reviewer')
+  return redirect(url_for('base.view_publication'))
 
 
 @reviewer.route('/manuscript/submission', methods=['GET'])
