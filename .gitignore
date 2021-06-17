@@ -5,3 +5,4 @@ __pycache__/
 .env
 app/static/images/uploads/
 app/static/docs/uploads/
+migrations/
